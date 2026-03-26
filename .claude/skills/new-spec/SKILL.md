@@ -7,8 +7,9 @@ description: Scaffolding a new versioned spec site on spec.gesslar.dev. Consult 
 
 This site uses Docusaurus with independent `@docusaurus/plugin-content-docs`
 instances for each specification. Each spec has its own route, sidebar,
-versioning, and homepage card. Only versioned docs are served
-(`includeCurrentVersion: false`).
+versioning, and homepage card. Both versioned and in-progress ("Next") docs are served
+(`includeCurrentVersion: true`), with the latest release pinned via
+`lastVersion` and the current/unreleased version labeled "Next".
 
 ## Information Needed
 
@@ -100,7 +101,14 @@ Add to the `plugins` array:
     path: 'specs/{id}',
     routeBasePath: '{id}',
     sidebarPath: './sidebars{Id}.js',
-    includeCurrentVersion: false,
+    includeCurrentVersion: true,
+    lastVersion: '{version}',
+    versions: {
+      current: {
+        label: 'Next',
+        banner: 'unreleased',
+      },
+    },
   },
 ],
 ```
@@ -144,6 +152,7 @@ Add an entry to the `specs` array:
 
 1. Run `npm run build` to verify the site builds without errors.
 2. If it succeeds, tell the user the new spec is ready at `/{id}`.
-3. Remind them that `specs/{id}/` is the working directory for content, and
-   they must copy files to `{id}_versioned_docs/version-X/` for them to
-   appear on the live site (since `includeCurrentVersion: false`).
+3. Remind them that `specs/{id}/` is the working directory for in-progress
+   content (shown as the "Next" version). To cut a release, copy files to
+   `{id}_versioned_docs/version-X/` and add the version to
+   `{id}_versions.json`.
