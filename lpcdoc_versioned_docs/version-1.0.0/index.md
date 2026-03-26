@@ -3,8 +3,6 @@ title: Introduction to LPCDoc
 hide_title: true
 ---
 
-# LPC Documentation Format
-
 LPCDoc is a documentation format for LPC (Lars Pensjö C), inspired by JSDoc. It
 defines a structured way to annotate LPC source code with standardized
 comments, facilitating the generation of comprehensive and user-friendly
