@@ -4,8 +4,6 @@ hide_title: true
 toc_max_heading_level: 2
 ---
 
-# LPCDoc: Tags Reference
-
 Tags are special LPCDoc annotations prefixed with `@` that provide structured
 information about code elements. They are placed within doc comments (`/** */`),
 after the descriptive text.
