@@ -7,10 +7,6 @@ const config = {
   tagline: 'Specification Repository',
   favicon: 'img/favicon.ico',
 
-  future: {
-    v4: true,
-  },
-
   url: 'https://spec.gesslar.dev',
   baseUrl: '/',
 
@@ -48,10 +44,21 @@ const config = {
         includeCurrentVersion: false,
       },
     ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'lpcdoc',
+        path: 'specs/lpcdoc',
+        routeBasePath: 'lpcdoc',
+        sidebarPath: './sidebarsLpcdoc.js',
+        includeCurrentVersion: false,
+      },
+    ],
   ],
 
   clientModules: [
     './src/clientModules/routeTransition.js',
+    './src/clientModules/codeWordWrap.js',
   ],
 
   stylesheets: [
@@ -73,16 +80,16 @@ const config = {
       },
       items: [
         {
-          type: 'docSidebar',
-          sidebarId: 'lpmlSidebar',
-          docsPluginId: 'lpml',
-          position: 'left',
-          label: 'LPML',
-        },
-        {
           type: 'docsVersionDropdown',
           docsPluginId: 'lpml',
           position: 'left',
+          className: 'version-dropdown version-dropdown--lpml',
+        },
+        {
+          type: 'docsVersionDropdown',
+          docsPluginId: 'lpcdoc',
+          position: 'left',
+          className: 'version-dropdown version-dropdown--lpcdoc',
         },
         {
           href: 'https://github.com/gesslar/spec.gesslar.dev',

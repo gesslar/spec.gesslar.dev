@@ -52,6 +52,21 @@ HEXDIG     = DIGIT | "A"-"F" | "a"-"f"
 opacity    = DIGIT+ ("." DIGIT+)?`,
 ];
 
+const specs = [
+  {
+    title: 'LPML',
+    description: 'LPC Markup Language — a human-friendly data serialization format designed for MUD configuration files.',
+    href: '/lpml',
+    icon: 'codicon-file-code',
+  },
+  {
+    title: 'LPCDoc',
+    description: 'A documentation format for LPC inspired by JSDoc, defining structured annotations for LPC source code.',
+    href: '/lpcdoc',
+    icon: 'codicon-book',
+  },
+];
+
 const BLOCK_COUNT = 3;
 
 const randomBetween = (min, max) => Math.random() * (max - min) + min;
@@ -150,41 +165,26 @@ export default function Home() {
               spec.gesslar.dev
             </h1>
           </div>
+          <p className={styles.tagline}>
+            Specifications define the rules, syntax, and behavior of languages,
+            formats, and protocols. They serve as the authoritative reference for
+            implementers and users alike — the single source of truth.
+          </p>
         </section>
 
-        <section className={styles.about}>
-          <div className={styles.aboutContent}>
-            <h3>What are specs?</h3>
-            <p>
-              Specifications define the rules, syntax, and behavior of languages, formats, and
-              protocols. They serve as the authoritative reference for implementers and users
-              alike — the single source of truth.
-            </p>
-
-            <div className={styles.features}>
-              <div className={styles.feature}>
-                <i className={`codicon codicon-law ${styles.featureIcon}`} />
-                <div>
-                  <h4>Authoritative</h4>
-                  <p>The definitive reference for how things should work</p>
-                </div>
+        <section className={styles.cards}>
+          {specs.map(spec => (
+            <a key={spec.title} href={spec.href} className={styles.card}>
+              <div className={styles.cardHeader}>
+                <i className={`codicon ${spec.icon} ${styles.cardIcon}`} />
+                <h2 className={styles.cardTitle}>{spec.title}</h2>
               </div>
-              <div className={styles.feature}>
-                <i className={`codicon codicon-symbol-ruler ${styles.featureIcon}`} />
-                <div>
-                  <h4>Precise</h4>
-                  <p>Formal grammars, exact syntax, and unambiguous rules</p>
-                </div>
-              </div>
-              <div className={styles.feature}>
-                <i className={`codicon codicon-references ${styles.featureIcon}`} />
-                <div>
-                  <h4>Versioned</h4>
-                  <p>Track evolution and changes across specification versions</p>
-                </div>
-              </div>
-            </div>
-          </div>
+              <p className={styles.cardDescription}>{spec.description}</p>
+              <span className={styles.cardLink}>
+                View spec <i className="codicon codicon-arrow-right" />
+              </span>
+            </a>
+          ))}
         </section>
       </main>
     </Layout>

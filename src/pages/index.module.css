@@ -11,8 +11,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 1rem;
+  gap: 2rem;
   isolation: isolate;
 }
 
@@ -41,13 +40,20 @@
   opacity: 0.9;
 }
 
+/* Hero */
+
 .hero {
   position: relative;
   z-index: 1;
   text-align: center;
   width: min(960px, 100%);
-  padding: 1rem 1rem 1.5rem;
-  margin-bottom: 1rem;
+  padding: 1.5rem 1rem 0;
+}
+
+.titleStack {
+  position: relative;
+  display: inline-block;
+  filter: drop-shadow(0 0 26px rgba(165, 180, 252, 0.15));
 }
 
 .title {
@@ -61,12 +67,6 @@
   position: relative;
   display: inline-block;
   animation: pulseGlow 5s ease-in-out infinite;
-}
-
-.titleStack {
-  position: relative;
-  display: inline-block;
-  filter: drop-shadow(0 0 26px rgba(165, 180, 252, 0.15));
 }
 
 .title::after {
@@ -83,6 +83,96 @@
   animation: jitterGhost 10s infinite ease-in-out;
   will-change: opacity, transform;
 }
+
+.tagline {
+  margin: 1.25rem auto 0;
+  max-width: 640px;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #b9c5e8;
+  opacity: 0.9;
+}
+
+/* Spec cards */
+
+.cards {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  width: min(800px, 100%);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(10, 10, 40, 0.45), rgba(8, 8, 30, 0.55));
+  outline: 1px solid rgba(165, 180, 252, 0.12);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(165, 180, 252, 0.08) inset;
+  text-decoration: none;
+  color: inherit;
+  transition: outline-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.card:hover {
+  outline-color: rgba(165, 180, 252, 0.3);
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(165, 180, 252, 0.15) inset,
+    0 0 30px rgba(99, 102, 241, 0.08);
+  transform: translateY(-2px);
+  text-decoration: none;
+  color: inherit;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.cardIcon {
+  font-size: 1.5rem;
+  color: #a5b4fc;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 1.4rem;
+  color: #e0e7ff;
+  text-shadow: 0 0 8px rgba(165, 180, 252, 0.2);
+}
+
+.cardDescription {
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: #9ba5d7;
+  flex: 1;
+}
+
+.cardLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #a5b4fc;
+  transition: gap 0.2s;
+}
+
+.card:hover .cardLink {
+  gap: 0.65rem;
+}
+
+/* Animations */
 
 @keyframes fadeGlitch {
   0% {
@@ -152,121 +242,34 @@
   }
 }
 
-.about {
-  position: relative;
-  z-index: 1;
-  max-width: 800px;
-  width: 100%;
-  padding: 1rem;
-  background: linear-gradient(135deg, rgba(10, 10, 40, 0.4), rgba(8, 8, 30, 0.5));
-  outline: 1px solid rgba(165, 180, 252, 0.12);
-  border-radius: 16px;
-  backdrop-filter: blur(10px);
-  box-shadow:
-    0 20px 60px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(165, 180, 252, 0.08) inset;
-}
-
-.aboutContent h2 {
-  margin: 0 0 1rem;
-  font-size: 1.8rem;
-  color: #e0e7ff;
-  text-shadow: 0 0 8px rgba(165, 180, 252, 0.3);
-}
-
-.aboutContent p {
-  margin: 0 0 2rem;
-  font-size: 1.1rem;
-  line-height: 1.7;
-  color: #b9c5e8;
-  opacity: 0.9;
-}
-
-.features {
-  display: grid;
-  gap: 1.5rem;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-}
-
-.feature {
-  display: flex;
-  gap: 0.5rem;
-  align-items: flex-start;
-  padding: 0.5rem;
-  background: rgba(165, 180, 252, 0.03);
-  border: 1px solid rgba(165, 180, 252, 0.08);
-  border-radius: 8px;
-}
-
-.featureIcon {
-  font-size: 1.5rem;
-  line-height: 1;
-  flex-shrink: 0;
-}
-
-.feature strong {
-  display: block;
-  margin-bottom: 0.25rem;
-  font-size: 1rem;
-  color: #d0d7f7;
-}
-
-.feature p {
-  margin: 0;
-  font-size: 0.9rem;
-  line-height: 1.15;
-  color: #9ba5d7;
-  opacity: 0.85;
-}
+/* Responsive */
 
 @media screen and (max-width: 996px) {
   .page {
-    padding: 0rem 0rem 0rem;
+    padding: 1.5rem 1rem;
   }
 
   .hero {
-    padding: 0rem 0rem;
-    margin-bottom: 0rem;
-  }
-
-  .about {
-    padding: 1rem;
-  }
-
-  .features {
-    gap: 1rem;
+    padding: 1rem 0 0;
   }
 }
 
 @media screen and (max-width: 640px) {
   .page {
-    padding: 1rem 1rem 1rem;
-  }
-
-  .stream {
-    width: clamp(140px, 34vw, 240px);
+    padding: 1rem;
   }
 
   .title {
     font-size: clamp(2rem, 3vw + 1rem, 3rem);
   }
 
-  .about {
-    padding: 1rem;
-  }
-
-  .aboutContent h3 {
-    line-height: 1.1rem;
-    font-size: 1.1rem;
-  }
-
-  .aboutContent p {
-    line-height: 1.2rem;
+  .tagline {
     font-size: 1rem;
+    line-height: 1.5;
   }
 
-  .features {
-    grid-template-columns: 1.1fr;
-    gap: 0.75rem;
+  .cards {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
 }
