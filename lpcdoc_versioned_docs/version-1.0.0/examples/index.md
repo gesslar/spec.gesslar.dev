@@ -4,7 +4,7 @@ hide_title: true
 toc_max_heading_level: 2
 ---
 
-# LPCDoc: Examples
+# Examples
 
 This section provides practical examples of using LPCDoc in various common scenarios.
 

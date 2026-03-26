@@ -4,7 +4,7 @@ hide_title: true
 toc_max_heading_level: 2
 ---
 
-# LPCDoc: Special Type Annotations
+# Special Type Annotations
 
 This section covers special type annotations used in LPCDoc that don't directly
 correspond to LPC primitive types but are useful for documentation purposes.

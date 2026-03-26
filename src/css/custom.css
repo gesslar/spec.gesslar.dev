@@ -130,6 +130,13 @@ html:has([class*='docMainContainer'] [href*='/lpcdoc/']) .version-dropdown--lpcd
   display: inline-flex !important;
 }
 
+/* Version badge — green for current release */
+.theme-doc-version-badge {
+  background-color: #16a34a;
+  color: #ffffff;
+  border: none;
+}
+
 /* Driver badge pills */
 .pill {
   border-radius: 10px;

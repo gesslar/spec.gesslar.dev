@@ -41,7 +41,14 @@ const config = {
         path: 'specs/lpml',
         routeBasePath: 'lpml',
         sidebarPath: './sidebarsLpml.js',
-        includeCurrentVersion: false,
+        includeCurrentVersion: true,
+        lastVersion: '1.0.0',
+        versions: {
+          current: {
+            label: 'Next',
+            banner: 'unreleased',
+          },
+        },
       },
     ],
     [
@@ -51,7 +58,14 @@ const config = {
         path: 'specs/lpcdoc',
         routeBasePath: 'lpcdoc',
         sidebarPath: './sidebarsLpcdoc.js',
-        includeCurrentVersion: false,
+        includeCurrentVersion: true,
+        lastVersion: '1.0.0',
+        versions: {
+          current: {
+            label: 'Next',
+            banner: 'unreleased',
+          },
+        },
       },
     ],
   ],

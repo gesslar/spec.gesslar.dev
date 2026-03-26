@@ -4,7 +4,7 @@ hide_title: true
 toc_max_heading_level: 2
 ---
 
-# LPCDoc: Composite Types
+# Composite Types
 
 This section describes composite types in LPC and how to document them using
 LPCDoc annotations.

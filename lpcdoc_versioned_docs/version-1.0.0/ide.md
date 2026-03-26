@@ -4,7 +4,7 @@ hide_title: true
 toc_max_heading_level: 2
 ---
 
-# LPCDoc: IDE Integration
+# IDE Integration
 
 LPCDoc is designed to work with modern development tools and IDEs. This section
 explains how LPCDoc comments can enhance your development experience through
