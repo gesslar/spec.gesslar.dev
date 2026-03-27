@@ -87,6 +87,43 @@ object find_entity(mixed value) {
 }
 ```
 
+## Parenthesized Union Arrays
+
+To annotate an array whose elements can be one of several types, wrap the
+union in parentheses and apply the `*` postfix.
+
+**Syntax:** `{(type1 | type2)*}`
+
+### Annotation Usage
+
+```c
+/**
+ * @type {(int | string)*}
+ */
+mixed *ids;
+
+/**
+ * @param {(STD_ARMOR | STD_CLOTHING)*} equipment - An array of equipment objects.
+ * @returns {int} The total armor class.
+ */
+int calculate_ac(object *equipment) {
+    int ac = 0;
+    foreach (object item in equipment) {
+        ac += item->query_ac();
+    }
+    return ac;
+}
+```
+
+Parentheses can also be used without `*` to group types for clarity:
+
+```c
+/**
+ * @type {(int | string)}
+ */
+mixed val;
+```
+
 ## Nested Composite Types
 
 More complex data structures can be documented using nested type annotations.
