@@ -45,7 +45,7 @@ const config = {
         lastVersion: '1.0.0',
         versions: {
           current: {
-            label: 'Next',
+            label: '1.1.0 (Next)',
             banner: 'unreleased',
           },
         },
