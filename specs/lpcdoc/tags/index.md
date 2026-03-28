@@ -92,6 +92,100 @@ type.
  */
 ```
 
+### Type Predicates
+
+A special form of `@returns` enables **type narrowing** in conditional
+branches. Instead of documenting a return type, it declares that the function
+acts as a type guard for one of its parameters.
+
+**Syntax:** `@returns {paramName is type}`
+
+Where `paramName` is the name of a parameter in the function signature and
+`type` is the type it should be narrowed to when the function returns a truthy
+value.
+
+```c
+/**
+ * @param {mixed} arg
+ * @returns {arg is string}
+ */
+int stringp(mixed arg);
+```
+
+When this function is called inside a conditional, the language server narrows
+the tested variable to the predicate type within the true branch:
+
+```c
+void test() {
+    mixed o;
+    if(stringp(o)) {
+        // o is narrowed to string here
+        string s = o; // OK
+    }
+}
+```
+
+The type predicate does not change the function's actual return type. The
+function still returns its declared type (e.g., `int`); the predicate only
+informs the language server's flow analysis.
+
+Type predicates work with any valid type, including primitives, composites, and
+object file paths:
+
+```c
+/**
+ * @param {mixed} arg
+ * @returns {arg is mixed*}
+ */
+int pointerp(mixed arg);
+
+/**
+ * @param {mixed} o
+ * @returns {o is "/std/living.c"}
+ */
+int is_living(mixed o);
+```
+
+Type predicates are not limited to simple type-checking functions. Any function
+that returns a truthy or falsy value can use a predicate to narrow a parameter.
+A description may follow the predicate to document the return value for human
+readers:
+
+```c
+/**
+ * Returns the original object if it is a user, otherwise 0.
+ *
+ * @param {object} ob - Some object.
+ * @returns {ob is "/std/user.c"} The original object if it is a user, or 0.
+ */
+object get_user(object ob) {
+    return ob->is_user() ? ob : 0;
+}
+```
+
+```c
+void test() {
+    object thing = find_object("/some/npc");
+    if(get_user(thing)) {
+        // thing is narrowed to "/std/user.c" here
+        thing->send_message("Hello!");
+    }
+}
+```
+
+Preprocessor defines are resolved in type predicates, so you can use macros
+as the target type:
+
+```c
+#define STD_USER "/std/user.c"
+
+/**
+ * @param {object} ob - Some object.
+ * @returns {ob is STD_USER} 1 if ob is a user object.
+ */
+int is_user(object ob);
+```
+
 ## `@throws`
 
 Documents conditions that cause a `throw()`. A `throw()` is a soft error — it
