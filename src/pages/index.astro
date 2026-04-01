@@ -127,7 +127,9 @@ const blocks = Array.from({ length: BLOCK_COUNT }, (_, i) => ({
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 2rem;
+        justify-content: flex-start;
+        padding-top: 12vh;
+        gap: 1.5rem;
         isolation: isolate;
       }
 
@@ -207,6 +209,61 @@ const blocks = Array.from({ length: BLOCK_COUNT }, (_, i) => ({
         color: #b9c5e8;
         opacity: 0.9;
       }
+
+      .about {
+        position: relative;
+        z-index: 1;
+        max-width: 800px;
+        width: 100%;
+        padding: 1.25rem 1.5rem;
+        background: linear-gradient(135deg, rgba(10, 10, 40, 0.4), rgba(8, 8, 30, 0.5));
+        outline: 1px solid rgba(165, 180, 252, 0.12);
+        border-radius: 16px;
+        backdrop-filter: blur(10px);
+        box-shadow:
+          0 20px 60px rgba(0, 0, 0, 0.5),
+          0 0 0 1px rgba(165, 180, 252, 0.08) inset;
+      }
+
+      .about h3 {
+        margin: 0 0 0.5rem;
+        color: #e0e7ff;
+        text-shadow: 0 0 8px rgba(165, 180, 252, 0.3);
+      }
+
+      .about > p {
+        margin: 0;
+        font-size: 1.1rem;
+        line-height: 1.7;
+        color: #b9c5e8;
+        opacity: 0.9;
+      }
+
+      .features {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        margin-top: 1.25rem;
+      }
+
+      .feature {
+        display: flex;
+        gap: 0.5rem;
+        align-items: flex-start;
+        padding: 0.5rem;
+        background: rgba(165, 180, 252, 0.03);
+        border: 1px solid rgba(165, 180, 252, 0.08);
+        border-radius: 8px;
+      }
+
+      .feature-icon {
+        font-size: 1.5rem;
+        line-height: 1;
+        flex-shrink: 0;
+      }
+
+      .feature h4 { margin: 0 0 0.25rem; color: #c7d2fe; font-size: 1rem; }
+      .feature p { margin: 0; font-size: 0.9rem; line-height: 1.15; color: #9ba5d7; opacity: 0.85; }
 
       .cards {
         position: relative;
@@ -315,6 +372,10 @@ const blocks = Array.from({ length: BLOCK_COUNT }, (_, i) => ({
         .page { padding: 1rem; }
         .title { font-size: clamp(2rem, 3vw + 1rem, 3rem); }
         .tagline { font-size: 1rem; line-height: 1.5; }
+        .about { padding: 1rem; }
+        .about h3 { line-height: 1.1rem; font-size: 1.1rem; }
+        .about > p { line-height: 1.2rem; font-size: 1rem; }
+        .features { grid-template-columns: 1fr; gap: 0.75rem; }
         .cards { grid-template-columns: 1fr; gap: 1rem; }
       }
     </style>
@@ -338,11 +399,39 @@ const blocks = Array.from({ length: BLOCK_COUNT }, (_, i) => ({
             spec.gesslar.dev
           </h1>
         </div>
-        <p class="tagline">
+      </section>
+
+      <section class="about">
+        <h3>What are specifications?</h3>
+        <p>
           Specifications define the rules, syntax, and behavior of languages,
           formats, and protocols. They serve as the authoritative reference for
-          implementers and users alike — the single source of truth.
+          implementers and users alike.
         </p>
+
+        <div class="features">
+          <div class="feature">
+            <i class="codicon codicon-law feature-icon"></i>
+            <div>
+              <h4>Authoritative</h4>
+              <p>The single source of truth for syntax and behavior</p>
+            </div>
+          </div>
+          <div class="feature">
+            <i class="codicon codicon-symbol-structure feature-icon"></i>
+            <div>
+              <h4>Structured</h4>
+              <p>Formal grammar and rules for unambiguous interpretation</p>
+            </div>
+          </div>
+          <div class="feature">
+            <i class="codicon codicon-references feature-icon"></i>
+            <div>
+              <h4>Reference</h4>
+              <p>Comprehensive documentation for implementers and users</p>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section class="cards">
@@ -354,7 +443,7 @@ const blocks = Array.from({ length: BLOCK_COUNT }, (_, i) => ({
             </div>
             <p class="card-description">{spec.description}</p>
             <span class="card-link">
-              View spec <i class="codicon codicon-arrow-right" />
+              Explore spec <i class="codicon codicon-arrow-right" />
             </span>
           </a>
         ))}
