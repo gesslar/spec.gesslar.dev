@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build Docusaurus
+      - name: Build Starlight
         run: npm run build
         env:
           NODE_ENV: production
@@ -53,4 +53,4 @@ jobs:
           SFTP_USERNAME: ${{ secrets.SFTP_USERNAME }}
           SFTP_TARGET_DIR: ${{ secrets.SFTP_TARGET_DIR }}
         run: |
-          rsync -avz --delete -e "ssh" build/ "$SFTP_USERNAME@$SFTP_SERVER:$SFTP_TARGET_DIR"
+          rsync -avz --delete -e "ssh" dist/ "$SFTP_USERNAME@$SFTP_SERVER:$SFTP_TARGET_DIR"

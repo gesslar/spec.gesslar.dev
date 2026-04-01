@@ -1,0 +1,65 @@
+/* Indigo/violet palette for Starlight */
+
+:root {
+  --sl-color-accent-low: #1e1b4b;
+  --sl-color-accent: #6366f1;
+  --sl-color-accent-high: #c7d2fe;
+  --sl-color-white: #e0e7ff;
+  --sl-color-gray-1: #c7d2fe;
+  --sl-color-gray-2: #a5b4fc;
+  --sl-color-gray-3: #818cf8;
+  --sl-color-gray-4: #4f46e5;
+  --sl-color-gray-5: #312e81;
+  --sl-color-gray-6: #1e1b4b;
+  --sl-color-black: #0a0a1a;
+}
+
+:root[data-theme='light'] {
+  --sl-color-accent-low: #e0e7ff;
+  --sl-color-accent: #4f46e5;
+  --sl-color-accent-high: #1e1b4b;
+  --sl-color-white: #1e1b4b;
+  --sl-color-gray-1: #312e81;
+  --sl-color-gray-2: #3730a3;
+  --sl-color-gray-3: #6366f1;
+  --sl-color-gray-4: #a5b4fc;
+  --sl-color-gray-5: #e0e7ff;
+  --sl-color-gray-6: #f8f7ff;
+  --sl-color-black: #ffffff;
+}
+
+/* Pill badges for driver-specific types */
+.pill {
+  border-radius: 10px;
+  color: #ffffff;
+  display: inline-block;
+  font-size: 65%;
+  font-weight: bold;
+  line-height: 1;
+  padding: 0.2rem 0.5rem;
+  vertical-align: middle;
+}
+
+.pill--fluffos {
+  background-color: rgb(34, 63, 170);
+}
+
+.pill--ldmud {
+  background-color: #2b7e6d;
+}
+
+/* Code block styling */
+pre {
+  padding: 0.5rem;
+  outline: 1px dashed rgba(165, 180, 252, 0.15);
+}
+
+/* Route transition animation */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+main {
+  animation: fadeIn 150ms ease-in;
+}

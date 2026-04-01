@@ -1,0 +1,437 @@
+---
+title: Primitives
+---
+
+This section describes the primitive types available in LPC and how to document
+them using LPCDoc annotations.
+
+## Integer (`int`)
+
+An integer is a whole number, either positive or negative.
+
+### Annotation Usage
+
+```lpc
+/**
+ * @param {int} count - The number of items.
+ * @returns {int} The total value.
+ */
+int calculate_total(int count) {
+  return count * 10;
+}
+```
+
+**NB**: It should be mentioned that if a value could be undefined, while it is
+`0` in all senses of the definition, it does merit specific annotation as
+`undefined`.
+
+```lpc
+/**
+ * @param {mapping} registry - A mapping of player names to their ages.
+ * @param {string} name - The name of the player.
+ * @returns {int, undefined} The age of the player, or undefined if not found.
+ */
+int player_age(mapping registry, string name) {
+  return registry[name];
+}
+```
+
+## Floating-Point Number (`float`)
+
+A floating-point number represents real numbers with decimal precision.
+
+### Annotation Usage
+
+```lpc
+/**
+ * @param {float} rate - The interest rate.
+ * @returns {float} The computed value.
+ */
+float compute_interest(float rate) {
+  return rate * 1.05;
+}
+```
+
+## String (`string`)
+
+A string is a sequence of characters.
+
+### Annotation Usage
+
+```lpc
+/**
+ * @param {string} name - The name of the user.
+ * @returns {string} A greeting message.
+ */
+string greet(string name) {
+  return "Hello, " + name + "!";
+}
+```
+
+## Array (`array`)
+
+An array is an ordered collection of values, which can be of any type.
+
+### Annotation Usage
+
+```lpc
+/**
+ * @param {string*} names - An array of strings containing names.
+ * @returns {int} The number of names.
+ */
+int count_names(string *names) {
+  return sizeof(names);
+}
+
+/**
+ * @returns {mixed*} An array containing various types of values.
+ */
+mixed *get_mixed_data() {
+  return ({ "text", 42, this_object() });
+}
+```
+
+## Object (`object`)
+
+An object refers to an instance of an LPC file. It can be annoted as simply `{object}`.
+
+A _named object_ reference can be documented with the full path to the expected
+object or blueprint file. This can be done by enclosing the path in quotes
+(e.g. `{"/path/to/object.c"}`), or by using LD's named object syntax (e.g.
+`{object "/path/to/object.c"}`).
+
+The file extensions (`.c`) are optional, but can be included for clarity.
+
+### Annotation Usage
+
+```lpc
+/**
+ * @returns {object} A reference to the player's object.
+ */
+object get_player() {
+  return this_player();
+}
+```
+
+Or, you can provide more information about what kind of object it is, by
+instead putting the full path to the object enclosed in quotes.
+
+```lpc
+/**
+ * @returns {"/std/player.c"} A reference to the player's object.
+ */
+object get_player() {
+  return this_player();
+}
+```
+
+If your project defines macros for common object paths (e.g.
+`#define STD_USER "/std/user.c"`), you can use the macro name directly as a
+type annotation. The language server will resolve the macro to the underlying
+object path.
+
+```lpc
+/**
+ * @param {STD_USER} caller - The player calling this function.
+ * @returns {int} 1 if successful, otherwise 0.
+ */
+int do_action(object caller) {
+  return 1;
+}
+```
+
+## Mapping (`mapping`)
+
+A key-value data structure.
+
+### Annotation Usage
+
+```lpc
+/**
+ * @returns {mapping} A mapping of configuration settings.
+ */
+mapping get_config() {
+  return ([ "max_hp": 100, "regen_rate": 5 ]);
+}
+```
+
+## Function (`function`) <span class="pill pill--fluffos">FluffOS</span> {#function}
+
+Represents a callable function reference. See also [`closure`](#closure)
+for LDMud's equivalent.
+
+### Annotation Usage
+
+```lpc
+/**
+ * @returns {function} A function reference for callbacks.
+ */
+function get_callback() {
+  return (: write, "Callback executed!" :);
+}
+```
+
+## Buffer (`buffer`) <span class="pill pill--fluffos">FluffOS</span> {#buffer}
+
+A binary data buffer for efficient byte manipulation. See also
+[`bytes`](#bytes) for a similar type available in LDMud.
+
+### Annotation Usage
+
+```lpc
+/**
+ * @param {int} size - The size of the buffer to create.
+ * @returns {buffer} A new buffer of the specified size.
+ */
+buffer create_buffer(int size) {
+  return allocate_buffer(size);
+}
+```
+
+## Class/Struct (`class`/`struct`)
+
+`class` is a FluffOS-only keyword <span class="pill pill--fluffos">FluffOS</span>, while `struct` is available in
+both drivers. They are structured data types that group related values together.
+When documenting a class/struct, include a **description** at the top and define
+all of its properties using the `@property` tag.
+
+### Annotation Usage
+
+For class definitions:
+
+```lpc
+/**
+ * The info file contains detailed item descriptions, special features,
+ * and any usage instructions. These files are stored in the shop's
+ * info directory structure.
+ *
+ * @property {string} short - Display name shown in shop menus
+ * @property {string} file - Full path to the item's source file
+ * @property {int} cost - Purchase price in ThreshCredits
+ * @property {int} stock - Current quantity available for purchase
+ * @property {string} info - Reference to additional item description file
+ *
+ */
+class ShopItem {
+  string short;
+  string file;
+  int cost;
+  int stock;
+  string info;
+}
+```
+
+For variables or returns that use the class:
+
+```lpc
+/**
+ * @returns {class ShopItem} A new shop item instance
+ */
+class ShopItem create_item() {
+  return new(class ShopItem,
+    short: "Magic Sword",
+    file: "/items/weapon/sword.c",
+    cost: 100,
+    stock: 5,
+    info: "magic_sword.txt"
+  );
+}
+```
+
+For arrays of class instances:
+
+```lpc
+/**
+ * @returns {class ShopItem*} An array of available shop items
+ */
+class ShopItem *get_available_items() {
+  return filter(all_items, (: $1->stock > 0 :));
+}
+```
+
+## Closure (`closure`) <span class="pill pill--ldmud">LDMud</span> {#closure}
+
+Represents a closure value in LDMud. Closures are LDMud's equivalent of
+FluffOS's [`function`](#function) type, representing callable
+references including lfun closures, lambda closures, and efun closures.
+
+### Annotation Usage
+
+```lpc
+/**
+ * @param {closure} cl - A closure to evaluate.
+ * @returns {mixed} The result of the closure evaluation.
+ */
+mixed eval_closure(closure cl) {
+  return funcall(cl);
+}
+```
+
+## Symbol (`symbol`) <span class="pill pill--ldmud">LDMud</span> {#symbol}
+
+A symbol is a quoted identifier, created with a single quote (e.g. `'foo`).
+Symbols are used primarily with lambda closures in LDMud.
+
+### Annotation Usage
+
+```lpc
+/**
+ * @param {symbol} sym - A symbol representing a variable name.
+ * @returns {string} The name of the symbol.
+ */
+string symbol_name(symbol sym) {
+  return sprintf("%Q", sym);
+}
+```
+
+## Lightweight Object (`lwobject`) <span class="pill pill--ldmud">LDMud</span> {#lwobject}
+
+A lightweight object is an object without a persistent identity in the object
+table. Lightweight objects are created from blueprints but do not have a unique
+object name and are garbage-collected when no longer referenced.
+
+### Annotation Usage
+
+```lpc
+/**
+ * @param {lwobject} iter - A lightweight iterator object.
+ * @returns {mixed} The next value from the iterator.
+ */
+mixed next_value(lwobject iter) {
+  return iter->next();
+}
+```
+
+## Bytes (`bytes`) <span class="pill pill--ldmud">LDMud</span> {#bytes}
+
+A byte sequence type for handling raw binary data in LDMud. Similar in purpose
+to FluffOS's [`buffer`](#buffer) type.
+
+### Annotation Usage
+
+```lpc
+/**
+ * @param {string} text - The text to convert.
+ * @returns {bytes} The UTF-8 encoded byte sequence.
+ */
+bytes encode_text(string text) {
+  return to_bytes(text, "UTF-8");
+}
+```
+
+## Coroutine (`coroutine`) <span class="pill pill--ldmud">LDMud</span> {#coroutine}
+
+Represents a coroutine — a function that can suspend its execution and be
+resumed later. Coroutines enable cooperative multitasking patterns.
+
+### Annotation Usage
+
+```lpc
+/**
+ * @param {coroutine} cr - A coroutine to resume.
+ * @returns {mixed} The yielded value from the coroutine.
+ */
+mixed resume(coroutine cr) {
+  return call_coroutine(cr);
+}
+```
+
+## LPC Type (`lpctype`) <span class="pill pill--ldmud">LDMud</span> {#lpctype}
+
+A first-class type value in LDMud. The `lpctype` type allows runtime
+inspection and comparison of types.
+
+### Annotation Usage
+
+```lpc
+/**
+ * @param {mixed} value - The value to inspect.
+ * @returns {lpctype} The type of the given value.
+ */
+lpctype get_type(mixed value) {
+  return to_lpctype(value);
+}
+```
+
+## Quoted Array (`quotedarray`) <span class="pill pill--ldmud">LDMud</span> {#quotedarray}
+
+A quoted array is an array that has been quoted for use in lambda closures.
+Quoting prevents the array from being interpreted as lambda code.
+
+### Annotation Usage
+
+```lpc
+/**
+ * @param {mixed*} arr - The array to quote.
+ * @returns {quotedarray} The quoted array for use in a lambda.
+ */
+quotedarray quote_data(mixed *arr) {
+  return quote(arr);
+}
+```
+
+## Status (`status`) <span class="pill pill--ldmud">LDMud</span> {#status}
+
+An alias for `int` in LDMud, retained for historical compatibility. It
+represents a boolean-like integer value (0 or 1).
+
+### Annotation Usage
+
+```lpc
+/**
+ * @param {object} ob - The object to check.
+ * @returns {status} 1 if the object is alive, 0 otherwise.
+ */
+status is_alive(object ob) {
+  return living(ob);
+}
+```
+
+## Reference (`ref`) <span class="pill pill--fluffos">FluffOS</span> {#ref}
+
+A reference type modifier in FluffOS that allows pass-by-reference semantics
+for function parameters.
+
+### Annotation Usage
+
+```lpc
+/**
+ * @param {int} &value - A reference to an integer that will be modified.
+ * @returns {void}
+ */
+void increment(int ref value) {
+  value++;
+}
+```
+
+## Char (`char`)
+
+Represents a single character value.
+
+### Annotation Usage
+
+```lpc
+/**
+ * @param {string} str - The string to inspect.
+ * @param {int} index - The character position.
+ * @returns {char} The character at the given index.
+ */
+char char_at(string str, int index) {
+  return str[index];
+}
+```
+
+## Mixed (`mixed`)
+
+Indicates a variable may contain **any** type.
+
+### Annotation Usage
+
+```lpc
+/**
+ * @returns {mixed} A value that could be any type.
+ */
+mixed get_value() {
+  return random(2) ? "text" : 42;
+}
+```

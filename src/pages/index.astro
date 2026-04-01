@@ -1,0 +1,364 @@
+---
+const specSnippets = [
+  `expression     = term ((PLUS | MINUS) term)*
+term           = factor ((STAR | SLASH) factor)*
+factor         = NUMBER | LPAREN expression RPAREN
+NUMBER         = [0-9]+
+PLUS           = "+"
+MINUS          = "-"`,
+
+  `<element>  ::= "<" <name> <attributes> ">"
+              <content>
+              "</" <name> ">"
+<name>     ::= <letter> (<letter> | <digit>)*
+<content>  ::= <element> | <text>`,
+
+  `message        = header CRLF body
+header         = field-name ":" field-value
+field-name     = token
+field-value    = *( field-content )
+body           = *OCTET`,
+
+  `object     = "{" members? "}"
+members    = pair ("," pair)*
+pair       = string ":" value
+value      = string | number | object
+           | array | "true" | "false"`,
+
+  `directive  = "%" name args? EOL
+name       = ALPHA (ALPHA | DIGIT | "_")*
+args       = arg ("," arg)*
+arg        = DQUOTE value DQUOTE | value
+value      = (VCHAR | SP)*`,
+
+  `path       = "/" segment ("/" segment)*
+segment    = pchar*
+pchar      = unreserved | pct-encoded
+unreserved = ALPHA | DIGIT | "-" | "."
+pct-encoded = "%" HEXDIG HEXDIG`,
+
+  `record     = field (COMMA field)* CRLF
+field      = escaped | non-escaped
+escaped    = DQUOTE (TEXTDATA | COMMA
+           | CR | LF | DQDQ)* DQUOTE
+non-escaped = TEXTDATA*`,
+
+  `color      = "#" hex hex hex (hex hex hex)?
+hex        = HEXDIG HEXDIG
+HEXDIG     = DIGIT | "A"-"F" | "a"-"f"
+opacity    = DIGIT+ ("." DIGIT+)?`,
+]
+
+const specs = [
+  {
+    title: 'LPML',
+    description: 'LPC Markup Language — a human-friendly data serialization format designed for MUD configuration files.',
+    href: '/lpml/',
+    icon: 'codicon-file-code',
+  },
+  {
+    title: 'LPCDoc',
+    description: 'A documentation format for LPC inspired by JSDoc, defining structured annotations for LPC source code.',
+    href: '/lpcdoc/',
+    icon: 'codicon-book',
+  },
+]
+
+const BLOCK_COUNT = 3
+const ALL_POSITIONS = [
+  { top: '8%', left: '5%' },
+  { top: '15%', right: '8%' },
+  { top: '35%', left: '3%' },
+  { top: '42%', right: '12%' },
+  { top: '58%', left: '10%' },
+  { top: '65%', right: '6%' },
+  { top: '78%', left: '7%' },
+  { top: '85%', right: '10%' },
+  { top: '25%', left: '50%' },
+  { top: '72%', right: '45%' },
+]
+
+function pickSnippet() {
+  const source = specSnippets[Math.floor(Math.random() * specSnippets.length)]
+  const lines = source.split('\n')
+  const length = Math.max(4, Math.floor(Math.random() * 3 + 5))
+  const start = Math.floor(Math.random() * Math.max(lines.length - length, 1))
+  return lines.slice(start, start + length).join('\n')
+}
+
+const blocks = Array.from({ length: BLOCK_COUNT }, (_, i) => ({
+  id: i,
+  ...ALL_POSITIONS[i % ALL_POSITIONS.length],
+  snippet: pickSnippet(),
+}))
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>spec.gesslar.dev</title>
+    <meta name="description" content="spec.gesslar.dev — specification hosting and reference" />
+    <link rel="icon" type="image/svg+xml" href="/img/logo.svg" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@vscode/codicons@0.0.36/dist/codicon.css"
+    />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      html, body {
+        height: 100%;
+        overflow: hidden;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      }
+
+      .page {
+        position: relative;
+        min-height: 100vh;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 10% 15%, rgba(99, 102, 241, 0.1), transparent 35%),
+          radial-gradient(circle at 85% 10%, rgba(168, 85, 247, 0.12), transparent 30%),
+          linear-gradient(140deg, #050510, #080818 45%, #0d0a1f);
+        color: #d9dfff;
+        padding: 2.5rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+        isolation: isolate;
+      }
+
+      .matrix-layer {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 0;
+      }
+
+      .block {
+        position: absolute;
+        color: #a5b4fc;
+        opacity: 0;
+        will-change: opacity, transform;
+        animation: fadeGlitch 10s infinite ease-in-out;
+        line-height: 1.4;
+        pointer-events: none;
+      }
+
+      .code {
+        font-family: 'JetBrains Mono', 'IBM Plex Mono', 'Fira Code', monospace;
+        white-space: pre;
+        font-size: 12px;
+        letter-spacing: 0.3px;
+        opacity: 0.9;
+      }
+
+      .hero {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        width: min(960px, 100%);
+        padding: 1.5rem 1rem 0;
+      }
+
+      .title-stack {
+        position: relative;
+        display: inline-block;
+        filter: drop-shadow(0 0 26px rgba(165, 180, 252, 0.15));
+      }
+
+      .title {
+        font-size: clamp(2.8rem, 5vw + 1rem, 4.6rem);
+        margin: 0;
+        line-height: 1.02;
+        color: #e0e7ff;
+        text-shadow:
+          0 0 12px rgba(165, 180, 252, 0.45),
+          0 0 36px rgba(99, 102, 241, 0.45);
+        position: relative;
+        display: inline-block;
+        animation: pulseGlow 5s ease-in-out infinite;
+      }
+
+      .title::after {
+        content: attr(data-text);
+        position: absolute;
+        inset: 0;
+        color: #818cf8;
+        opacity: 0.18;
+        mix-blend-mode: color-burn;
+        text-shadow:
+          1px 0 12px rgba(129, 140, 248, 0.35),
+          -1px 0 12px rgba(168, 85, 247, 0.25);
+        pointer-events: none;
+        animation: jitterGhost 10s infinite ease-in-out;
+        will-change: opacity, transform;
+      }
+
+      .tagline {
+        margin: 1.25rem auto 0;
+        max-width: 640px;
+        font-size: 1.1rem;
+        line-height: 1.7;
+        color: #b9c5e8;
+        opacity: 0.9;
+      }
+
+      .cards {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        width: min(800px, 100%);
+      }
+
+      .card {
+        display: flex;
+        flex-direction: column;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, rgba(10, 10, 40, 0.45), rgba(8, 8, 30, 0.55));
+        outline: 1px solid rgba(165, 180, 252, 0.12);
+        border-radius: 16px;
+        backdrop-filter: blur(10px);
+        box-shadow:
+          0 20px 60px rgba(0, 0, 0, 0.5),
+          0 0 0 1px rgba(165, 180, 252, 0.08) inset;
+        text-decoration: none;
+        color: inherit;
+        transition: outline-color 0.2s, box-shadow 0.2s, transform 0.2s;
+      }
+
+      .card:hover {
+        outline-color: rgba(165, 180, 252, 0.3);
+        box-shadow:
+          0 24px 70px rgba(0, 0, 0, 0.55),
+          0 0 0 1px rgba(165, 180, 252, 0.15) inset,
+          0 0 30px rgba(99, 102, 241, 0.08);
+        transform: translateY(-2px);
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .card-icon {
+        font-size: 1.5rem;
+        color: #a5b4fc;
+      }
+
+      .card-title {
+        margin: 0;
+        font-size: 1.4rem;
+        color: #e0e7ff;
+        text-shadow: 0 0 8px rgba(165, 180, 252, 0.2);
+      }
+
+      .card-description {
+        margin: 0 0 1rem;
+        font-size: 0.95rem;
+        line-height: 1.55;
+        color: #9ba5d7;
+        flex: 1;
+      }
+
+      .card-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #a5b4fc;
+        transition: gap 0.2s;
+      }
+
+      .card:hover .card-link {
+        gap: 0.65rem;
+      }
+
+      @keyframes fadeGlitch {
+        0% { opacity: 0; }
+        50% { opacity: 0.5; }
+        100% { opacity: 0; transform: perspective(400px) translateZ(100px); filter: blur(5px); }
+      }
+
+      @keyframes jitterGhost {
+        0% { transform: translate(0, 0); opacity: 0.18; }
+        20% { transform: translate(-1px, 1px); opacity: 0.25; }
+        40% { transform: translate(1px, -1px); opacity: 0.2; }
+        60% { transform: translate(0px, 0.5px); opacity: 0.26; }
+        80% { transform: translate(-0.5px, -0.5px); opacity: 0.17; }
+        100% { transform: translate(0, 0); opacity: 0.22; }
+      }
+
+      @keyframes pulseGlow {
+        0% { text-shadow: 0 0 12px rgba(165, 180, 252, 0.45), 0 0 36px rgba(99, 102, 241, 0.45); }
+        50% { text-shadow: 0 0 18px rgba(165, 180, 252, 0.55), 0 0 46px rgba(99, 102, 241, 0.55); }
+        100% { text-shadow: 0 0 12px rgba(165, 180, 252, 0.45), 0 0 36px rgba(99, 102, 241, 0.45); }
+      }
+
+      @media screen and (max-width: 996px) {
+        .page { padding: 1.5rem 1rem; }
+        .hero { padding: 1rem 0 0; }
+      }
+
+      @media screen and (max-width: 640px) {
+        .page { padding: 1rem; }
+        .title { font-size: clamp(2rem, 3vw + 1rem, 3rem); }
+        .tagline { font-size: 1rem; line-height: 1.5; }
+        .cards { grid-template-columns: 1fr; gap: 1rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <div class="matrix-layer" aria-hidden="true">
+        {blocks.map((block, idx) => (
+          <div
+            class="block"
+            style={`top: ${block.top}; ${block.left ? `left: ${block.left}` : `right: ${block.right}`}; animation-delay: ${idx * 1.2}s;`}
+          >
+            <div class="code">{block.snippet}</div>
+          </div>
+        ))}
+      </div>
+
+      <section class="hero">
+        <div class="title-stack">
+          <h1 class="title" data-text="spec.gesslar.dev">
+            spec.gesslar.dev
+          </h1>
+        </div>
+        <p class="tagline">
+          Specifications define the rules, syntax, and behavior of languages,
+          formats, and protocols. They serve as the authoritative reference for
+          implementers and users alike — the single source of truth.
+        </p>
+      </section>
+
+      <section class="cards">
+        {specs.map(spec => (
+          <a href={spec.href} class="card">
+            <div class="card-header">
+              <i class={`codicon ${spec.icon} card-icon`} />
+              <h2 class="card-title">{spec.title}</h2>
+            </div>
+            <p class="card-description">{spec.description}</p>
+            <span class="card-link">
+              View spec <i class="codicon codicon-arrow-right" />
+            </span>
+          </a>
+        ))}
+      </section>
+    </main>
+  </body>
+</html>
