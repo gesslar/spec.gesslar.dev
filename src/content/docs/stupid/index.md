@@ -65,7 +65,7 @@ The WebKit DMABUF renderer crashes on X11 + NVIDIA. We set
 `WEBKIT_DISABLE_DMABUF_RENDERER=1` before Tauri spawns any threads,
 because `std::env::set_var` is `unsafe` for exactly that reason.
 
-See: tauri-apps/tauri#8541
+See: [tauri-apps/tauri#8541](https://github.com/tauri-apps/tauri/issues/8541)
 ```
 
 ---
