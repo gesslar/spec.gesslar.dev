@@ -9,6 +9,7 @@ sidebar:
 LPML is built on JSON5, which extends JSON with:
 
 ### Comments
+
 ```lpml
 // Single-line comments
 /* Multi-line
@@ -16,6 +17,7 @@ LPML is built on JSON5, which extends JSON with:
 ```
 
 ### Unquoted Keys
+
 ```lpml
 {
   name: "Gesslar",           // Simple identifier
@@ -28,6 +30,7 @@ LPML is built on JSON5, which extends JSON with:
 **Spacey Keys:** LPML supports YAML-style keys with spaces - just write the key naturally and end it with `:`. The parser reads everything until the colon as the key name.
 
 ### Trailing Commas
+
 ```lpml
 {
   foo: "bar",
@@ -36,11 +39,13 @@ LPML is built on JSON5, which extends JSON with:
 ```
 
 ### Single-Quoted Strings
+
 ```lpml
 name: 'single quotes work too'
 ```
 
 ### Number Formats
+
 ```lpml
 {
   hex: 0xFF,           // Hexadecimal
@@ -76,11 +81,13 @@ Unlike JSON5, LPML allows keys with spaces without requiring quotes:
 ```
 
 **How it works:**
+
 - The parser reads everything from the start of the key until it finds `:`
 - Leading and trailing whitespace is trimmed
 - Works alongside traditional identifiers and quoted keys
 
 **Examples:**
+
 ```lpml
 {
   // Character data with natural keys
@@ -119,6 +126,7 @@ text: "First paragraph."
 ```
 
 **Rules:**
+
 1. If a string ends with `\n`, the next string concatenates **without** adding a space
 2. Otherwise, strings are joined with a single space
 3. Works with any quote style: `"..."`, `'...'`
@@ -136,6 +144,7 @@ description: "This is a long
 ```
 
 **Folding behavior:**
+
 - Actual newlines in the source (pressing Enter) are converted to spaces
 - Escape sequences like `\n` are preserved as actual newlines
 
@@ -159,6 +168,7 @@ A string value beginning with `#` followed by a path denotes a file include:
 ```
 
 **Specified behavior:**
+
 1. A conforming implementation SHOULD replace the `#path` value with the parsed contents of the referenced file
 2. Included files SHOULD be recursively processed (supporting nested includes)
 3. How relative paths are resolved is implementation-defined
@@ -166,6 +176,7 @@ A string value beginning with `#` followed by a path denotes a file include:
 5. Include syntax works with both double and single quotes
 
 **Escaping includes:**
+
 ```lpml
 {
   channel: "\#general"  // → "#general" (literal)

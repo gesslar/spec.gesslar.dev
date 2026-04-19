@@ -35,6 +35,10 @@ export default defineConfig({
           label: 'LPCDoc',
           autogenerate: { directory: 'lpcdoc' },
         },
+        {
+          label: 'STUPID',
+          autogenerate: { directory: 'STUPID' },
+        },
       ],
     }),
   ],

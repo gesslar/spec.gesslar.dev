@@ -82,6 +82,7 @@ sidebar:
 ## Modular Configuration
 
 **main.lpml:**
+
 ```lpml
 {
   game: {
@@ -97,6 +98,7 @@ sidebar:
 ```
 
 **db-config.lpml:**
+
 ```lpml
 {
   host: "localhost",
