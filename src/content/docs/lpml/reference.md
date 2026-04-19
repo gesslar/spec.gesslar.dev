@@ -32,7 +32,7 @@ Alternative: `.json` or `.json5` for editor syntax highlighting
 
 ## Grammar Summary
 
-```
+```text
 value       ::= object | array | string | number | boolean | null
                 | 'undefined' | 'Infinity' | 'NaN' | 'MAX_INT' | 'MAX_FLOAT'
 object      ::= '{' members? '}'

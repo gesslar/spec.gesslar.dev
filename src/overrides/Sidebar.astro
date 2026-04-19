@@ -1,54 +1,57 @@
 ---
-import MobileMenuFooter from 'virtual:starlight/components/MobileMenuFooter'
-import SidebarPersister from '@astrojs/starlight/components/SidebarPersister.astro'
-import SidebarSublist from '@astrojs/starlight/components/SidebarSublist.astro'
+import MobileMenuFooter from "@astrojs/starlight/components/MobileMenuFooter.astro";
+import SidebarPersister from "@astrojs/starlight/components/SidebarPersister.astro";
+import SidebarSublist from "@astrojs/starlight/components/SidebarSublist.astro";
 
-const { sidebar } = Astro.locals.starlightRoute
-const currentPath = Astro.url.pathname
+const { sidebar } = Astro.locals.starlightRoute;
+const currentPath = Astro.url.pathname;
 
 // Each top-level sidebar group is a spec (LPML, LPCDoc, etc.)
 // Find which one we're currently in by checking the current path
-const specs = sidebar.filter((entry) => entry.type === 'group')
+const specs = sidebar.filter((entry) => entry.type === "group");
 const activeSpec = specs.find((spec) => {
   const walk = (entries: typeof sidebar): boolean =>
-    entries.some((e) =>
-      e.type === 'link' ? e.isCurrent : walk(e.entries)
-    )
-  return walk(spec.entries)
-})
+    entries.some((e) => (e.type === "link" ? e.isCurrent : walk(e.entries)));
+  return walk(spec.entries);
+});
 
 // Only show the active spec's entries in the sidebar
-const filtered = activeSpec ? activeSpec.entries : []
+const filtered = activeSpec ? activeSpec.entries : [];
 
 // Build dropdown options: label + first link href for each spec
 const options = specs.map((spec) => {
   const findFirst = (entries: typeof sidebar): string | null => {
     for (const e of entries) {
-      if (e.type === 'link') return e.href
-      const found = findFirst(e.entries)
-      if (found) return found
+      if (e.type === "link") return e.href;
+      const found = findFirst(e.entries);
+      if (found) return found;
     }
-    return null
-  }
+    return null;
+  };
   return {
     label: spec.label,
-    href: findFirst(spec.entries) || '/',
+    href: findFirst(spec.entries) || "/",
     active: spec === activeSpec,
-  }
-})
+  };
+});
 ---
 
 <nav class="spec-switcher">
-  <select
-    aria-label="Choose a specification"
-    data-spec-select
-  >
-    {!activeSpec && <option value="/" selected>Choose a spec…</option>}
-    {options.map((opt) => (
-      <option value={opt.href} selected={opt.active}>
-        {opt.label}
-      </option>
-    ))}
+  <select aria-label="Choose a specification" data-spec-select>
+    {
+      !activeSpec && (
+        <option value="/" selected>
+          Choose a spec…
+        </option>
+      )
+    }
+    {
+      options.map((opt) => (
+        <option value={opt.href} selected={opt.active}>
+          {opt.label}
+        </option>
+      ))
+    }
   </select>
 </nav>
 
@@ -85,8 +88,10 @@ const options = specs.map((spec) => {
 </style>
 
 <script>
-  document.querySelector('[data-spec-select]')?.addEventListener('change', (e) => {
-    const target = e.target as HTMLSelectElement
-    if (target.value) window.location.href = target.value
-  })
+  document
+    .querySelector("[data-spec-select]")
+    ?.addEventListener("change", (e) => {
+      const target = e.target as HTMLSelectElement;
+      if (target.value) window.location.href = target.value;
+    });
 </script>

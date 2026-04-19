@@ -88,6 +88,7 @@ Standard JSON escape sequences are supported:
 ```
 
 Supported escapes:
+
 - `\"` - Double quote
 - `\'` - Single quote
 - `\\` - Backslash
