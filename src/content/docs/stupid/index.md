@@ -13,7 +13,7 @@ A convention for documenting load-bearing workarounds in software projects.
 
 `STUPID.md` is a project file that catalogues workarounds, patches, and
 contortions that exist in a codebase not because they are correct, but because
- else is more wrong. It is distinct from setup documentation (which explains
+something else is more wrong. It is distinct from setup documentation (which explains
  what is expected) and from general developer notes (which explain intent). Its
  specific domain is the unexpected: the thing a future maintainer would remove
  in a cleanup pass, break the build, and spend hours discovering why it was
