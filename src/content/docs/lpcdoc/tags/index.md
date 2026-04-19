@@ -1,5 +1,6 @@
 ---
 title: Tags Reference
+description: Reference for LPCDoc tags — the structured `@`-prefixed annotations used within doc comments to document parameters, return values, and more.
 ---
 
 Tags are special LPCDoc annotations prefixed with `@` that provide structured

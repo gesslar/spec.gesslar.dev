@@ -1,5 +1,6 @@
 ---
 title: Special Type Annotations
+description: Special LPCDoc type annotations — such as `undefined` — that don't map to LPC primitives but are useful for distinguishing cases like "not found" from a real value.
 ---
 
 This section covers special type annotations used in LPCDoc that don't directly

@@ -1,5 +1,6 @@
 ---
 title: LPML Specification
+description: LPC Markup Language — a human-friendly data serialization format for MUD configuration files, extending JSON5 with spacey keys, multiline strings, and file includes.
 sidebar:
   order: 1
 ---

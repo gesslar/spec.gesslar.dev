@@ -25,7 +25,11 @@ Before scaffolding, gather from the user:
    text and can be whatever casing the user wants (e.g., "STUPID").
 2. **Display title** (`{title}`) — human-readable name for the sidebar group
    and homepage card (e.g., "LPML", "LPCDoc").
-3. **One-line description** (`{description}`) — shown on the homepage card.
+3. **One-line description** (`{description}`) — shown on the homepage card
+   **and** used as the subtitle in the auto-generated Open Graph social card
+   (see `src/pages/open-graph/[...slug].ts`). Every page's frontmatter
+   `description` feeds its OG card, so require one for each new page, not
+   just the index.
 4. **Codicon icon** (`{icon}`) — VS Code codicon class for the homepage card
    (e.g., `codicon-file-code`, `codicon-book`). Full list:
    https://microsoft.github.io/vscode-codicons/dist/codicon.html
@@ -54,6 +58,12 @@ Add further pages (`reference.md`, `examples.md`, etc.) as the user dictates.
 Each page's frontmatter controls its sidebar label (`title`) and ordering
 (`sidebar.order`). See
 https://starlight.astro.build/reference/frontmatter/ for the full schema.
+
+**Every page must have a `description`.** The Open Graph route at
+`src/pages/open-graph/[...slug].ts` generates a social card per page using
+the frontmatter `title` and `description`. A page without a description
+produces a card with an empty subtitle, which looks broken when pasted into
+Discord/Slack/etc. Prompt the user for one per page, not just the index.
 
 ## Files to Edit
 

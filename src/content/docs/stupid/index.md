@@ -1,5 +1,6 @@
 ---
 title: STUPID.md
+description: A convention for documenting load-bearing workarounds in software projects — a root-level file that tracks the "why" behind surprising code.
 sidebar:
   order: 1
 ---

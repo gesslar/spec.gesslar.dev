@@ -30,6 +30,13 @@ src/content/docs/{id}/
 
 Starlight reads frontmatter (`title`, `description`, `sidebar`) from each page.
 
+Every page **must** include a `description`. The Open Graph image route at
+`src/pages/open-graph/[...slug].ts` generates a 1200×630 social card per
+page using the frontmatter `title` and `description`. A page without a
+description produces a card with an empty subtitle, which looks broken when
+the URL is pasted into Discord, Slack, or any other site that unfurls OG
+tags.
+
 ### 2. Register the sidebar group
 
 In `astro.config.mjs`, append a group to the `sidebar` array:

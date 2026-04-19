@@ -1,5 +1,6 @@
 ---
 title: Data Types
+description: The data types supported by LPML — primitives, arrays, and object mappings — with examples of nesting, trailing commas, and mixed-type collections.
 sidebar:
   order: 3
 ---

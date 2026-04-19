@@ -26,6 +26,7 @@ export default defineConfig({
       components: {
         Sidebar: './src/overrides/Sidebar.astro',
       },
+      routeMiddleware: './src/starlightRouteData.ts',
       sidebar: [
         {
           label: 'LPML',
