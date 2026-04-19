@@ -1,5 +1,6 @@
 ---
 title: Types Overview
+description: Overview of LPCDoc type annotations — primitives, composites, and driver-specific types for FluffOS and LDMud used in `@type`, `@param`, and `@returns` tags.
 ---
 
 LPCDoc supports type annotations to improve clarity in documentation. Types are used in `@type`, `@param`, and `@returns` tags to indicate expected values.

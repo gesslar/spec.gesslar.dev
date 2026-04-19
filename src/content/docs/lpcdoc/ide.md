@@ -1,5 +1,6 @@
 ---
 title: IDE Integration
+description: How LPCDoc comments enhance IDE features — IntelliSense, hover docs, signature help, and type checking via the LPC Language Services extension for VS Code.
 ---
 
 LPCDoc is designed to work with modern development tools and IDEs. This section

@@ -1,5 +1,6 @@
 ---
 title: LPCDoc Examples
+description: Practical examples of LPCDoc doc comments for common LPC scenarios — functions, parameters, return values, and more complex annotations.
 ---
 
 This section provides practical examples of using LPCDoc in various common scenarios.

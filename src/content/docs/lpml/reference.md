@@ -1,5 +1,6 @@
 ---
 title: Reference
+description: Quick reference for LPML — file extensions, syntax conventions, and implementation details for working with the format.
 sidebar:
   order: 5
 ---

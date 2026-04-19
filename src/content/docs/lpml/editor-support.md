@@ -1,5 +1,6 @@
 ---
 title: Editor Support
+description: Editor tooling for LPML, including the TextMate grammar for syntax highlighting in VS Code, Sublime Text, and other compatible editors.
 sidebar:
   order: 6
 ---

@@ -1,5 +1,6 @@
 ---
 title: Primitives
+description: The primitive LPC types — int, float, string, object, mapping, and others — and how to document them using LPCDoc annotations.
 ---
 
 This section describes the primitive types available in LPC and how to document

@@ -1,5 +1,6 @@
 ---
 title: Syntax
+description: LPML syntax rules — comments, unquoted and spacey keys, trailing commas, multiline strings, and the JSON5 foundations underpinning the format.
 sidebar:
   order: 2
 ---

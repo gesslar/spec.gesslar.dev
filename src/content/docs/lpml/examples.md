@@ -1,5 +1,6 @@
 ---
 title: Examples
+description: Practical LPML examples for MUD configs — character sheets, item and loot definitions, rooms, and other real-world uses of the format.
 sidebar:
   order: 4
 ---

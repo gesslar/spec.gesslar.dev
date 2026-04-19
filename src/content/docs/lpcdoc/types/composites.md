@@ -1,5 +1,6 @@
 ---
 title: Composite Types
+description: Composite LPC types — typed arrays, typed mappings, classes, and unions — and how to annotate them using LPCDoc type syntax.
 ---
 
 This section describes composite types in LPC and how to document them using
