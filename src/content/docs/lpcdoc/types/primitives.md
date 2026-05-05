@@ -30,7 +30,7 @@ int calculate_total(int count) {
 /**
  * @param {mapping} registry - A mapping of player names to their ages.
  * @param {string} name - The name of the player.
- * @returns {int, undefined} The age of the player, or undefined if not found.
+ * @returns {int | undefined} The age of the player, or undefined if not found.
  */
 int player_age(mapping registry, string name) {
   return registry[name];
