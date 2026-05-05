@@ -21,7 +21,7 @@ The `undefined` annotation helps document this special case.
 /**
  * @param {mapping} data - A mapping of player information.
  * @param {string} player_name - The name of the player to look up.
- * @returns {int, undefined} The score for the player, or undefined if player not found.
+ * @returns {int | undefined} The score for the player, or undefined if player not found.
  */
 int get_score(mapping data, string player_name) {
     return data[player_name]["score"];
@@ -32,7 +32,7 @@ int get_score(mapping data, string player_name) {
 /**
  * @param {mapping} items - A mapping of item names to quantities.
  * @param {string} item_name - The name of the item to check.
- * @returns {int, undefined} The quantity of the item, or undefined if not in inventory.
+ * @returns {int | undefined} The quantity of the item, or undefined if not in inventory.
  */
 int check_inventory(mapping items, string item_name) {
     return items[item_name];
@@ -61,7 +61,7 @@ void log_message(string message) {
 ## Multiple Return Types
 
 Sometimes functions can return different types depending on their inputs or
-conditions. LPCDoc uses the [tuple](composites#tuples) annotation to indicate
+conditions. LPCDoc uses [union types](composites#union-types) to indicate
 multiple possible return types.
 
 ### Annotation Usage
@@ -69,7 +69,7 @@ multiple possible return types.
 ```lpc
 /**
  * @param {string} identifier - An entity identifier.
- * @returns {object, string} The entity object if found, or an error message string if not found.
+ * @returns {object | string} The entity object if found, or an error message string if not found.
  */
 mixed find_entity(string identifier) {
     object entity = find_object(identifier);
