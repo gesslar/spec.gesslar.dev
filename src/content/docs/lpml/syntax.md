@@ -21,14 +21,16 @@ LPML is built on JSON5, which extends JSON with:
 
 ```lpml
 {
-  name: "Gesslar",           // Simple identifier
-  my cool key: "value",      // Spacey keys (YAML-style)
-  additional ids: [1, 2, 3], // Works great!
-  'quoted-key': "value"      // Use quotes when needed
+  name: "Gesslar",            // Simple identifier
+  my cool key: "value",       // Spaces are fine (YAML-style)
+  admin-heal: "sound.wav",    // So are hyphens
+  café: "value",              // ...and UTF-8 letters
+  additional ids: [1, 2, 3],  // Works great!
+  "key: with colon": "value"  // Quote only for a literal ':'
 }
 ```
 
-**Spacey Keys:** LPML supports YAML-style keys with spaces - just write the key naturally and end it with `:`. The parser reads everything until the colon as the key name.
+**Spacey Keys:** LPML borrows YAML's unquoted-key feel — write the key naturally and end it with `:`. The parser takes everything up to the **first** `:` as the key name and trims surrounding whitespace, so spaces, hyphens, dots, digits, and UTF-8 letters are all valid unquoted. Reach for quotes only when the key must contain a literal `:` — the one character that always ends the key.
 
 ### Trailing Commas
 
@@ -65,17 +67,20 @@ name: 'single quotes work too'
 
 ### Spacey Keys (YAML-style)
 
-Unlike JSON5, LPML allows keys with spaces without requiring quotes:
+Unlike JSON5 — which only allows identifier keys to go unquoted — LPML lets you write almost any key without quotes, YAML-style:
 
 ```lpml
 {
-  // All of these are valid:
+  // All of these are valid, unquoted:
   simple: "value",
   two words: "value",
   multiple word key: "value",
   crafting material: "leather",
+  admin-heal: "sound.wav",   // hyphens
+  level-2: "value",          // hyphens and digits
+  café: "value",             // UTF-8 letters
 
-  // Still works with quotes if you need them:
+  // Quote a key only when it must contain a literal colon:
   "key: with colon": "value",
   'single quoted': "value"
 }
@@ -83,9 +88,10 @@ Unlike JSON5, LPML allows keys with spaces without requiring quotes:
 
 **How it works:**
 
-- The parser reads everything from the start of the key until it finds `:`
-- Leading and trailing whitespace is trimmed
-- Works alongside traditional identifiers and quoted keys
+- The parser reads everything from the start of the key until the **first** `:`, then trims surrounding whitespace
+- Any character is allowed in between — spaces, hyphens, dots, digits, UTF-8 letters
+- The first `:` always ends the key. This is where LPML differs from YAML, which ends a key only at a colon *followed by whitespace*; to put a literal `:` inside a key, quote it
+- Quoted keys are the escape hatch for anything the bare form can't express
 
 **Examples:**
 
