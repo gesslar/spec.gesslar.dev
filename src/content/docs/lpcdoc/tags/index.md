@@ -25,6 +25,8 @@ Documents a function parameter. The `{type}` can be any
 
 **Syntax:** `@param {type} name - Description`
 
+**Aliases:** `@arg`, `@argument`
+
 ```lpc
 /**
  * @param {int} attack - The attack power value.
@@ -57,13 +59,20 @@ int unlock(string which) {
 
 ### Reference parameters
 
-In FluffOS, parameters passed by reference can be documented with `&`.
+In FluffOS a parameter is passed by reference with the `ref` keyword, or its
+`&` sugar, placed **after the type** in the function signature — `int ref value`
+and `int & value` are equivalent.
+
+The annotation mirrors that spelling: put the `&` after the `{type}`, before the
+parameter name — `@param {int} & value`. The `&` sits outside the braces;
+placing it inside (`{int&}`) is read as an intersection type, not a
+by-reference marker.
 
 ```lpc
 /**
- * @param {int} &value - A reference to an integer that will be modified.
+ * @param {int} & value - A reference to an integer that will be modified.
  */
-void increment(int ref value) {
+void increment(int & value) {
   value++;
 }
 ```
@@ -75,6 +84,8 @@ Documents the return value of a function. The `{type}` can be any
 [special](../types/special) type.
 
 **Syntax:** `@returns {type} Description`
+
+**Alias:** `@return`
 
 ```lpc
 /**
@@ -193,6 +204,8 @@ mechanism for recoverable exceptions.
 
 **Syntax:** `@throws Description of the condition`
 
+**Alias:** `@exception`
+
 ```lpc
 /**
  * @throws If the configuration file was not found.
@@ -258,11 +271,19 @@ Documents the type of an inherited variable. Use this when a variable is
 declared in a parent object and you want to provide type information in the
 inheriting file.
 
-**Syntax:** `@var {type} Description`
+**Syntax:** `@var {type} name - Description`
+
+Unlike `@type`, the `@var` tag names the variable it annotates, and the
+language server enforces several rules for it:
+
+- It must include both a **type** and a **variable name**.
+- The name must refer to an **inherited** variable — annotating a local
+  variable is an error.
+- It must appear in its **own** doc comment, not combined with other tags.
 
 ```lpc
 /**
- * @var {([ string: int ])} Inherited mapping of skill names to levels.
+ * @var {([ string: int ])} skills - Inherited mapping of skill names to levels.
  */
 ```
 
@@ -349,6 +370,14 @@ Documents a property of a class or struct. Used in the doc comment immediately
 above the class/struct definition.
 
 **Syntax:** `@property {type} name - Description`
+
+:::note
+The language server only treats `@property` as a **structural type definition**
+inside [`@typedef`](#typedef) and [`@callback`](#callback), where the properties
+describe the shape of the defined type. Above a `class` or `struct`,
+`@property` is rendered as documentation text — the member types themselves come
+from the actual field declarations, not from the tag.
+:::
 
 ```lpc
 /**

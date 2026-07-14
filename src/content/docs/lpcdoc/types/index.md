@@ -12,7 +12,6 @@ LPCDoc recognizes the following primitive types:
 - `int` - An integer.
 - `float` - A floating-point number.
 - `string` - A sequence of characters.
-- `char` - A single character value.
 - `object` - An instance of an LPC object.
 - `mapping` - A key-value data structure.
 - `mixed` - Represents a value that could be of any type.
@@ -22,11 +21,16 @@ LPCDoc recognizes the following primitive types:
 - `bytes` <span class="pill pill--ldmud">LDMud</span> - A byte sequence for raw binary data.
 - `symbol` <span class="pill pill--ldmud">LDMud</span> - A quoted identifier for use with lambda closures.
 - `lwobject` <span class="pill pill--ldmud">LDMud</span> - A lightweight object without persistent identity.
-- `coroutine` <span class="pill pill--ldmud">LDMud</span> - A suspendable, resumable function.
-- `lpctype` <span class="pill pill--ldmud">LDMud</span> - A first-class type value.
-- `quotedarray` <span class="pill pill--ldmud">LDMud</span> - A quoted array for use in lambda closures.
 - `status` <span class="pill pill--ldmud">LDMud</span> - A historical alias for `int`.
-- `ref` <span class="pill pill--fluffos">FluffOS</span> - A pass-by-reference type modifier.
+
+## Modifiers
+
+Modifiers are keywords or symbols that sit next to a type in a declaration. They
+change how a value is passed, not what type it is, so they are not types
+themselves.
+
+- `&` <span class="pill pill--fluffos">FluffOS</span> - Marks a pass-by-reference parameter. The `ref` keyword or its `&` sugar follows the type in both places, so the annotation mirrors the signature — code `int & name` (or `int ref name`) pairs with `@param {int} & name`. See [Reference parameters](../tags/#reference-parameters).
+- `...` - Marks a variadic (rest) parameter that accepts any number of trailing arguments. Prefix the type in the annotation — `@param {...int} rest`.
 
 ## Composite Types
 
@@ -37,7 +41,6 @@ To indicate more complex types, or to provide more details, use:
 - `([ string: int | undefined ])` - A mapping where the keys are strings, but the values may be int or undefined.
 - `([ string: int ])*` - An array of mappings where keys are strings and values are integers.
 - `int | string` - A union type, meaning the value could be an int or a string.
-- `({ "/std/weapon.c", "/std/room.c" })` - A tuple of objects, prototyped as a weapon and a room.
 
 ## Special Cases
 

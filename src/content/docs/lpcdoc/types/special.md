@@ -112,25 +112,9 @@ int unlock(string which) {
 }
 ```
 
-## Any Type (`*`)
-
-For cases where any type is acceptable but you want to document this
-explicitly, the `*` annotation can be used. This is different from `mixed` in
-that it specifically documents the acceptance of any type, rather than a
-variable that might contain different types in different contexts.
-
-### Annotation Usage
-
-```lpc
-/**
- * @param {*} value - Any value to be stored.
- * @param {string} key - The key under which to store the value.
- * @returns {void}
- */
-void store_value(mixed value, string key) {
-    storage[key] = value;
-}
-```
+To document a value that may hold **any** type, use [`mixed`](primitives#mixed).
+LPCDoc has no separate "any" annotation — a bare `*` is the array suffix, not a
+wildcard — so `mixed` is the way to express it.
 
 These special type annotations help document code behavior accurately even when
 the underlying language might not have a dedicated type for these concepts.

@@ -320,57 +320,6 @@ bytes encode_text(string text) {
 }
 ```
 
-## Coroutine (`coroutine`) <span class="pill pill--ldmud">LDMud</span> {#coroutine}
-
-Represents a coroutine — a function that can suspend its execution and be
-resumed later. Coroutines enable cooperative multitasking patterns.
-
-### Annotation Usage
-
-```lpc
-/**
- * @param {coroutine} cr - A coroutine to resume.
- * @returns {mixed} The yielded value from the coroutine.
- */
-mixed resume(coroutine cr) {
-  return call_coroutine(cr);
-}
-```
-
-## LPC Type (`lpctype`) <span class="pill pill--ldmud">LDMud</span> {#lpctype}
-
-A first-class type value in LDMud. The `lpctype` type allows runtime
-inspection and comparison of types.
-
-### Annotation Usage
-
-```lpc
-/**
- * @param {mixed} value - The value to inspect.
- * @returns {lpctype} The type of the given value.
- */
-lpctype get_type(mixed value) {
-  return to_lpctype(value);
-}
-```
-
-## Quoted Array (`quotedarray`) <span class="pill pill--ldmud">LDMud</span> {#quotedarray}
-
-A quoted array is an array that has been quoted for use in lambda closures.
-Quoting prevents the array from being interpreted as lambda code.
-
-### Annotation Usage
-
-```lpc
-/**
- * @param {mixed*} arr - The array to quote.
- * @returns {quotedarray} The quoted array for use in a lambda.
- */
-quotedarray quote_data(mixed *arr) {
-  return quote(arr);
-}
-```
-
 ## Status (`status`) <span class="pill pill--ldmud">LDMud</span> {#status}
 
 An alias for `int` in LDMud, retained for historical compatibility. It
@@ -385,40 +334,6 @@ represents a boolean-like integer value (0 or 1).
  */
 status is_alive(object ob) {
   return living(ob);
-}
-```
-
-## Reference (`ref`) <span class="pill pill--fluffos">FluffOS</span> {#ref}
-
-A reference type modifier in FluffOS that allows pass-by-reference semantics
-for function parameters.
-
-### Annotation Usage
-
-```lpc
-/**
- * @param {int} &value - A reference to an integer that will be modified.
- * @returns {void}
- */
-void increment(int ref value) {
-  value++;
-}
-```
-
-## Char (`char`)
-
-Represents a single character value.
-
-### Annotation Usage
-
-```lpc
-/**
- * @param {string} str - The string to inspect.
- * @param {int} index - The character position.
- * @returns {char} The character at the given index.
- */
-char char_at(string str, int index) {
-  return str[index];
 }
 ```
 

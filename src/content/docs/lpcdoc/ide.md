@@ -33,7 +33,7 @@ enhance code intelligence features.
 
 ### Basic Syntax
 
-The basic syntax for type annotations follows JSDoc conventions:
+The basic syntax for type annotations is:
 
 ```lpc
 /**
@@ -107,6 +107,16 @@ Disables diagnostics for an entire file:
 
 ```lpc
 // @lpc-nocheck
+... statements
+```
+
+### @lpc-check
+
+Re-enables diagnostics for a file — the inverse of `@lpc-nocheck`. Use it to
+turn checking back on for files that would otherwise be skipped:
+
+```lpc
+// @lpc-check
 ... statements
 ```
 

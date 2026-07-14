@@ -9,7 +9,7 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "update": "npx npm-check-updates -u && npm install"
+    "update": "npx -y npm-check-updates -u && npm install"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.3",

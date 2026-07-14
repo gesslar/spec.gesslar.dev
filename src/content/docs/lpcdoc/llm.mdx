@@ -29,9 +29,9 @@ description: LPCDoc comment block generation guide for FluffOS. Consult when wri
 
 # LPCDoc Generation Guide
 
-LPCDoc is a documentation format for LPC (Lars Pensjö C) source code,
-inspired by JSDoc. This guide targets the FluffOS driver. Follow these
-guidelines to produce accurate, consistent, and useful documentation.
+LPCDoc is a documentation format for LPC (Lars Pensjö C) source code.
+This guide targets the FluffOS driver. Follow these guidelines to produce
+accurate, consistent, and useful documentation.
 
 ## Comment Block Structure
 
@@ -170,14 +170,12 @@ Syntax: {@link reference}
 - int - Integer
 - float - Floating-point number
 - string - Text string
-- char - Single character value
 - object - Generic object
 - mapping - Key-value structure
 - function - Function reference
 - buffer - Binary data buffer
 - class - Structured data type
 - struct - Structured data type
-- ref - Pass-by-reference modifier
 - mixed - Any type
 - void - No return value
 
@@ -205,14 +203,12 @@ Separate types with pipe:
 {type1 | type2}
 Example: {int | string}
 
-### Function Types
-For function references with signature:
-{function(paramtype1, paramtype2): returntype}
-Example: {function(int, int): int}
-
-### Tuples
-Fixed-size collections with potentially different types:
-{({ string, int, float })}
+### Reference & Variadic Parameters
+These markers attach to the parameter, not the type:
+- Pass-by-reference: put & after the {type}, before the name.
+  @param {int} & value  (mirrors the signature `int & value` / `int ref value`)
+- Variadic (rest): prefix the type with ...
+  @param {...int} rest  (a function taking any number of trailing ints)
 
 ### Optional Parameters
 Wrap the name in brackets:
@@ -275,9 +271,9 @@ description: LPCDoc comment block generation guide for LDMud. Consult when writi
 
 # LPCDoc Generation Guide
 
-LPCDoc is a documentation format for LPC (Lars Pensjö C) source code,
-inspired by JSDoc. This guide targets the LDMud driver. Follow these
-guidelines to produce accurate, consistent, and useful documentation.
+LPCDoc is a documentation format for LPC (Lars Pensjö C) source code.
+This guide targets the LDMud driver. Follow these guidelines to produce
+accurate, consistent, and useful documentation.
 
 ## Comment Block Structure
 
@@ -417,7 +413,6 @@ Syntax: {@link reference}
 - int - Integer
 - float - Floating-point number
 - string - Text string
-- char - Single character value
 - object - Generic object
 - mapping - Key-value structure
 - closure - Closure value (callable reference)
@@ -425,9 +420,6 @@ Syntax: {@link reference}
 - lwobject - Lightweight object
 - bytes - Byte sequence for raw binary data
 - struct - Structured data type
-- coroutine - Suspendable, resumable function
-- lpctype - First-class type value
-- quotedarray - Quoted array for use in lambda closures
 - status - Historical alias for int
 - mixed - Any type
 - void - No return value
@@ -456,13 +448,10 @@ Separate types with pipe:
 {type1 | type2}
 Example: {int | string}
 
-### Closures
-For closure values with signature:
-{closure(paramtype1, paramtype2): returntype}
-
-### Tuples
-Fixed-size collections with potentially different types:
-{({ string, int, float })}
+### Variadic Parameters
+For a parameter that takes any number of trailing arguments, prefix the type
+with ...:
+@param {...int} rest
 
 ### Optional Parameters
 Wrap the name in brackets:
