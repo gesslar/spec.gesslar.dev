@@ -62,6 +62,37 @@ int MAX_PLAYER_HP = 1000;
 mapping resistances = ([ "fire": 10, "cold": 5, "physical": 3 ]);
 ```
 
+## Describing a Mapping's Keys
+
+```lpc
+/**
+ * @typedef {mapping} AccountRecord
+ * @property {string} name - The account holder's name.
+ * @property {int} created - When the account was created.
+ * @property {string*} characters - Names of the account's characters.
+ */
+
+/**
+ * Account records, keyed by account name.
+ *
+ * @type {([ string: AccountRecord ])}
+ */
+mapping accounts = ([ ]);
+
+/**
+ * Counts the characters on an account.
+ *
+ * @param {string} account - The account name.
+ * @returns {int} The number of characters, or 0 if there is no such account.
+ */
+int character_count(string account) {
+    /** @type {AccountRecord} */
+    mapping record = accounts[account];
+
+    return record ? sizeof(record["characters"]) : 0;
+}
+```
+
 ## Expression Type Annotation
 
 ```lpc

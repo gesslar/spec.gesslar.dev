@@ -131,6 +131,10 @@ If your project defines macros for common object paths (e.g.
 type annotation. The language server will resolve the macro to the underlying
 object path.
 
+Type keywords are never expanded as macros inside a doc type. A mudlib that
+defines `#define undefined ([])[0]` can still write `{mixed | undefined}`, and
+`undefined` keeps its LPCDoc meaning.
+
 ```lpc
 /**
  * @param {STD_USER} caller - The player calling this function.
@@ -138,6 +142,19 @@ object path.
  */
 int do_action(object caller) {
   return 1;
+}
+```
+
+To document an array of named objects, append `*` to any of these spellings,
+such as `{"/std/player.c"*}`, `{object "/std/player.c"*}`, or
+`{object STD_USER*}`.
+
+```lpc
+/**
+ * @returns {object STD_USER*} Every user in the room.
+ */
+object *present_users() {
+  return filter(all_inventory(), (: userp :));
 }
 ```
 
@@ -156,9 +173,22 @@ mapping get_config() {
 }
 ```
 
-## Function (`function`) <span class="pill pill--fluffos">FluffOS</span> {#function}
+A bare `mapping` says nothing about its keys or values. To describe them, use
+a [typed mapping](../composites/#mappings-with-specific-key-value-types) or a
+[mapping shape](../composites/#mapping-shapes):
 
-Represents a callable function reference. See also [`closure`](#closure)
+```lpc
+/**
+ * @returns {([ string: int ])} Setting names mapped to their values.
+ */
+mapping get_config() {
+  return ([ "max_hp": 100, "regen_rate": 5 ]);
+}
+```
+
+## Function (`function`) <span class="pill pill--fluffos">FluffOS</span>
+
+Represents a callable function reference. See also [`closure`](#closure-closure-ldmud)
 for LDMud's equivalent.
 
 ### Annotation Usage
@@ -172,10 +202,10 @@ function get_callback() {
 }
 ```
 
-## Buffer (`buffer`) <span class="pill pill--fluffos">FluffOS</span> {#buffer}
+## Buffer (`buffer`) <span class="pill pill--fluffos">FluffOS</span>
 
 A binary data buffer for efficient byte manipulation. See also
-[`bytes`](#bytes) for a similar type available in LDMud.
+[`bytes`](#bytes-bytes-ldmud) for a similar type available in LDMud.
 
 ### Annotation Usage
 
@@ -188,6 +218,61 @@ buffer create_buffer(int size) {
   return allocate_buffer(size);
 }
 ```
+
+## Promise (`promise`) <span class="pill pill--fluffos">FluffOS</span>
+
+The pending result of a FluffOS coroutine. Write the type of the value the
+promise resolves to (its **payload**) in angle brackets: `promise<int>`. A bare
+`promise` is `promise<mixed>`.
+
+Calling an `async` function gives a promise whose payload is the function's
+declared return type. For example, calling `async int work()` gives
+`promise<int>`. Using `await` on that promise gives back the payload, `int`.
+
+### Annotation Usage
+
+```lpc
+/**
+ * @param {promise<string>} pending - A read that has not finished yet.
+ * @returns {int} The number of lines read.
+ */
+async int count_lines(promise<string> pending) {
+  string text = await pending;
+  return sizeof(explode(text, "\n"));
+}
+```
+
+The `*` array marker applies to the type it follows:
+
+- `promise<int*>` - A promise of an array of integers. `await` gives `int*`.
+- `promise<int>*` - An array of promises. The array isn't a promise, so
+  `await` on it has no effect.
+
+### Documenting `async` functions
+
+An `async` function's `@returns` documents the **payload**, the same type its
+`return` statements use. It doesn't document the promise the caller receives.
+The language server wraps the payload in a promise for callers automatically.
+
+```lpc
+/**
+ * @returns {int} The number of records saved.
+ */
+async int save_all() {
+  // ...
+}
+```
+
+Don't write `@returns {promise<int>}` for an `async int` function. Callers
+would see the same type either way: the language server doesn't wrap a promise
+in a second promise, so a call still gives `promise<int>` and `await` still
+gives `int`. The function body is different. `@returns` overrides the declared
+return type, and `return` statements are checked against that type without
+unwrapping it. With `@returns {promise<int>}`, `return 1;` is reported as
+`Type 'int' is not assignable to type 'promise<int>'`.
+
+A promise also can't hold `void` or another promise, so `promise<void>` and
+`promise<promise<int>>` are errors.
 
 ## Class/Struct (`class`/`struct`)
 
@@ -250,10 +335,10 @@ class ShopItem *get_available_items() {
 }
 ```
 
-## Closure (`closure`) <span class="pill pill--ldmud">LDMud</span> {#closure}
+## Closure (`closure`) <span class="pill pill--ldmud">LDMud</span>
 
 Represents a closure value in LDMud. Closures are LDMud's equivalent of
-FluffOS's [`function`](#function) type, representing callable
+FluffOS's [`function`](#function-function-fluffos) type, representing callable
 references including lfun closures, lambda closures, and efun closures.
 
 ### Annotation Usage
@@ -268,7 +353,7 @@ mixed eval_closure(closure cl) {
 }
 ```
 
-## Symbol (`symbol`) <span class="pill pill--ldmud">LDMud</span> {#symbol}
+## Symbol (`symbol`) <span class="pill pill--ldmud">LDMud</span>
 
 A symbol is a quoted identifier, created with a single quote (e.g. `'foo`).
 Symbols are used primarily with lambda closures in LDMud.
@@ -285,7 +370,7 @@ string symbol_name(symbol sym) {
 }
 ```
 
-## Lightweight Object (`lwobject`) <span class="pill pill--ldmud">LDMud</span> {#lwobject}
+## Lightweight Object (`lwobject`) <span class="pill pill--ldmud">LDMud</span>
 
 A lightweight object is an object without a persistent identity in the object
 table. Lightweight objects are created from blueprints but do not have a unique
@@ -303,10 +388,10 @@ mixed next_value(lwobject iter) {
 }
 ```
 
-## Bytes (`bytes`) <span class="pill pill--ldmud">LDMud</span> {#bytes}
+## Bytes (`bytes`) <span class="pill pill--ldmud">LDMud</span>
 
 A byte sequence type for handling raw binary data in LDMud. Similar in purpose
-to FluffOS's [`buffer`](#buffer) type.
+to FluffOS's [`buffer`](#buffer-buffer-fluffos) type.
 
 ### Annotation Usage
 
@@ -320,7 +405,7 @@ bytes encode_text(string text) {
 }
 ```
 
-## Status (`status`) <span class="pill pill--ldmud">LDMud</span> {#status}
+## Status (`status`) <span class="pill pill--ldmud">LDMud</span>
 
 An alias for `int` in LDMud, retained for historical compatibility. It
 represents a boolean-like integer value (0 or 1).

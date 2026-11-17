@@ -21,9 +21,19 @@ access to:
 - **IntelliSense and Code Completion** - Type information from LPCDoc comments
   is used to provide better suggestions
 - **Hover Information** - See documentation when hovering over functions and
-  variables
+  variables, including the types written in each tag (`@param`, `@returns`,
+  `@throws`, `@property`) and the tags of each `@overload`
 - **Signature Help** - Parameter information appears as you type function calls
 - **Type Checking** - The extension uses type annotations to validate your code
+
+### Checking a Whole Project
+
+The editor only reports problems for files that are open. To check every file
+in the project, run **LPC: Check Project for Problems** from the Command
+Palette. It checks the project described by your `lpc-config.json` and puts
+the results in the Problems panel. That includes errors in doc comments, such
+as a malformed type annotation, which are reported in the file that contains
+the comment.
 
 ## Type Annotations
 

@@ -113,6 +113,9 @@ This will be evident by the appearance of error() in the function body.
 ### @type
 Documents a variable's type.
 Syntax: @type {type}
+Also works inline on an expression or a foreach loop variable:
+object p = /** @type {"/std/player.c"} */(get_player());
+foreach(/** @type {"/std/player.c"} */ object ob in users()) { ... }
 
 ### @example
 Provides example usage.
@@ -126,11 +129,11 @@ Syntax: @property {type} name - Description
 Defines a named type alias or structured shape. Use with @property tags to
 describe the expected shape of a data structure.
 Syntax: @typedef {type} Name (simple alias)
-Syntax: @typedef Name followed by @property tags (structured shape)
+Syntax: @typedef {mapping} Name followed by @property tags (mapping shape)
 
 Example:
 /**
- * @typedef PlayerData
+ * @typedef {mapping} PlayerData
  * @property {string} name - The player's display name.
  * @property {int} level - Current experience level.
  */
@@ -174,14 +177,17 @@ Syntax: {@link reference}
 - mapping - Key-value structure
 - function - Function reference
 - buffer - Binary data buffer
+- promise - Pending result of an async function; write the resolved type
+  as promise<type>, e.g. promise<int>. Bare promise means promise<mixed>.
 - class - Structured data type
 - struct - Structured data type
 - mixed - Any type
 - void - No return value
 
 ### Named Objects
-For objects of specific types, enclose the path in quotes:
-{"/path/to/object.c"}
+For objects of specific types, enclose the path in quotes, or use the named
+object syntax:
+{"/path/to/object.c"} or {object "/path/to/object.c"}
 Example: {"/std/player.c"}
 
 If a macro is defined for a common object path
@@ -192,16 +198,28 @@ If a macro is defined for a common object path
 Append * to a type:
 {type*}
 Example: {string*} for string array
+Works on named objects too: {"/std/player.c"*} or {object STD_USER*}
 
 ### Mappings
 For mappings with specific key/value types:
 {([ keytype: valuetype ])}
 Example: {([ string: int ])} for string-to-int mapping
 
+For a mapping with known keys (a record), list each key with its own type,
+separated by commas. This is a mapping shape:
+{([ "name": string, "hp": int ])}
+Shapes are open: unlisted keys are still allowed and read as mixed.
+Shapes nest: {([ string: ([ "roles": string* ]) ])}
+
+To reuse a shape, name it with @typedef {mapping} (see @typedef above) and
+use the name as the type: @param {PlayerData} data
+
 ### Union Types
 Separate types with pipe:
 {type1 | type2}
 Example: {int | string}
+For an array of a union, wrap the union in parentheses: {(int | string)*}
+({int | string*} means an int or an array of strings.)
 
 ### Reference & Variadic Parameters
 These markers attach to the parameter, not the type:
@@ -220,6 +238,11 @@ With default values:
 ### Undefined Values
 For values that might be undefined:
 @returns {type | undefined} Description
+
+### Async Functions
+For an async function, @returns documents the resolved value, not the
+promise: async int save_all() takes @returns {int}, never
+@returns {promise<int>}.
 
 ### Classes
 Document with @property tags above the definition:
@@ -255,7 +278,9 @@ void func3(); // public
 2. Document all parameters and return values
 3. Note any side effects or state changes
 4. Include @example for complex functions
-5. Specify types as precisely as possible
+5. Specify types as precisely as possible. Prefer a named object type over a
+   bare object, and a mapping shape or @typedef {mapping} over a bare mapping
+   when the keys are known
 6. Document error conditions with @errors and throw conditions with @throws
 7. Do not modify code — only add or update documentation comments
 ```
@@ -356,6 +381,9 @@ in the function body.
 ### @type
 Documents a variable's type.
 Syntax: @type {type}
+Also works inline on an expression or a foreach loop variable:
+object p = /** @type {"/std/player.c"} */(get_player());
+foreach(/** @type {"/std/player.c"} */ object ob in users()) { ... }
 
 ### @example
 Provides example usage.
@@ -369,11 +397,11 @@ Syntax: @property {type} name - Description
 Defines a named type alias or structured shape. Use with @property tags to
 describe the expected shape of a data structure.
 Syntax: @typedef {type} Name (simple alias)
-Syntax: @typedef Name followed by @property tags (structured shape)
+Syntax: @typedef {mapping} Name followed by @property tags (mapping shape)
 
 Example:
 /**
- * @typedef PlayerData
+ * @typedef {mapping} PlayerData
  * @property {string} name - The player's display name.
  * @property {int} level - Current experience level.
  */
@@ -437,16 +465,32 @@ If a macro is defined for a common object path
 Append * to a type:
 {type*}
 Example: {string*} for string array
+Works on named objects too: {"/std/player.c"*} or {object STD_USER*}
 
 ### Mappings
 For mappings with specific key/value types:
 {([ keytype: valuetype ])}
 Example: {([ string: int ])} for string-to-int mapping
 
+For a mapping with known keys (a record), list each key with its own type,
+separated by commas. This is a mapping shape:
+{([ "name": string, "hp": int ])}
+Shapes are open: unlisted keys are still allowed and read as mixed.
+Shapes nest: {([ string: ([ "roles": string* ]) ])}
+
+To reuse a shape, name it with @typedef {mapping} (see @typedef above) and
+use the name as the type: @param {PlayerData} data
+
+For multi-value mappings, separate the value columns with ; as in literals:
+{([ string: int; float ])}
+Never use , between value columns. A comma separates entries.
+
 ### Union Types
 Separate types with pipe:
 {type1 | type2}
 Example: {int | string}
+For an array of a union, wrap the union in parentheses: {(int | string)*}
+({int | string*} means an int or an array of strings.)
 
 ### Variadic Parameters
 For a parameter that takes any number of trailing arguments, prefix the type
@@ -498,7 +542,9 @@ void func3(); // public
 2. Document all parameters and return values
 3. Note any side effects or state changes
 4. Include @example for complex functions
-5. Specify types as precisely as possible
+5. Specify types as precisely as possible. Prefer a named object type over a
+   bare object, and a mapping shape or @typedef {mapping} over a bare mapping
+   when the keys are known
 6. Document error conditions with @errors and throw conditions with @throws
 7. Do not modify code — only add or update documentation comments
 ```

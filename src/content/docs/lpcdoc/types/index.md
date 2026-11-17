@@ -18,6 +18,7 @@ LPCDoc recognizes the following primitive types:
 - `function` <span class="pill pill--fluffos">FluffOS</span> - Represents a function value.
 - `closure` <span class="pill pill--ldmud">LDMud</span> - Represents a closure value.
 - `buffer` <span class="pill pill--fluffos">FluffOS</span> - A binary data buffer.
+- `promise` <span class="pill pill--fluffos">FluffOS</span> - The pending result of an `async` function. Write the resolved type in angle brackets, as in `promise<int>`.
 - `bytes` <span class="pill pill--ldmud">LDMud</span> - A byte sequence for raw binary data.
 - `symbol` <span class="pill pill--ldmud">LDMud</span> - A quoted identifier for use with lambda closures.
 - `lwobject` <span class="pill pill--ldmud">LDMud</span> - A lightweight object without persistent identity.
@@ -37,10 +38,16 @@ themselves.
 To indicate more complex types, or to provide more details, use:
 
 - `string*` - An array of strings. Append `*` to any type.
+- `"/std/player.c"*` - An array of objects of a specific type.
 - `([ string: int ])` - A mapping where keys are strings and values are integers.
 - `([ string: int | undefined ])` - A mapping where the keys are strings, but the values may be int or undefined.
 - `([ string: int ])*` - An array of mappings where keys are strings and values are integers.
+- `([ "name": string, "hp": int ])` - A mapping shape. Each listed key has its own type.
 - `int | string` - A union type, meaning the value could be an int or a string.
+
+See [Composite Types](composites/) for the full syntax, including
+[mapping shapes](composites/#mapping-shapes) and naming a shape with
+`@typedef {mapping}`.
 
 ## Special Cases
 
