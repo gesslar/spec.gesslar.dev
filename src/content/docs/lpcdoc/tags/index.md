@@ -293,7 +293,7 @@ A `@type` on a variable declared as `object`, `mixed`, `mapping`, `function`,
 or `closure` refines that declaration. The keyword can't say which object a
 variable holds or what a mapping contains, so the annotation provides those
 details. For example, `@type {([ string: int ])}` on a `mapping` variable makes
-every read of that variable an `int`.
+every entry read from it, such as `m["key"]`, an `int`.
 
 ### Inline expression casting
 
