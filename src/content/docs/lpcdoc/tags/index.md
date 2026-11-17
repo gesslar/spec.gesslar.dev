@@ -15,6 +15,18 @@ after the descriptive text.
  */
 ```
 
+An `@` starts a tag only when a tag name follows it. Any other `@`, such as a
+lone `@` or the `@@` prefix used by `process_string()`, stays part of the text:
+
+```lpc
+/**
+ * Expands a template. A value starting with @@ calls a function in this
+ * object.
+ *
+ * @param {string} template - The template to expand.
+ */
+```
+
 ---
 
 ## `@param`
@@ -100,6 +112,26 @@ type.
 /**
  * @returns {object | string} The entity if found, or an error message.
  */
+```
+
+A prototype and its definition are one function, so `@returns` can go on
+either. A common layout puts a bare prototype in a header and documents the
+definition, or the other way round. If the declaration being read has no
+`@returns`, the language server takes it from the other one. A `@returns` that
+is present is never replaced by one from elsewhere. Overloads, which are
+several prototypes with no body, never borrow each other's `@returns`.
+
+```lpc
+// player.h
+/**
+ * @returns {"/std/player.c"*} Every player in the game.
+ */
+object *all_players();
+
+// player.c
+object *all_players() {
+  return filter(users(), (: interactive :));
+}
 ```
 
 ### Type Predicates
@@ -257,12 +289,30 @@ int MAX_PLAYER_HP = 1000;
 mapping resistances = ([ "fire": 10, "cold": 5, "physical": 3 ]);
 ```
 
+A `@type` on a variable declared as `object`, `mixed`, `mapping`, `function`,
+or `closure` refines that declaration. The keyword can't say which object a
+variable holds or what a mapping contains, so the annotation provides those
+details. For example, `@type {([ string: int ])}` on a `mapping` variable makes
+every read of that variable an `int`.
+
 ### Inline expression casting
 
 You can annotate an expression inline to assert its type.
 
 ```lpc
 object p = /** @type {"/std/player.c"} */(get_player());
+```
+
+### Loop variables
+
+The same inline form annotates a `foreach` loop variable. Without an
+annotation, the loop variable takes the element type of whatever it iterates.
+With one, the annotation wins, and the loop body is still checked against it.
+
+```lpc
+foreach(/** @type {"/std/player.c"} */ object ob in users()) {
+    ob->save_me();
+}
 ```
 
 ## `@var`
@@ -294,8 +344,8 @@ documenting complex data structures — like the expected shape of a mapping —
 without needing a `class` or `struct` definition. The language server resolves
 object paths in `@typedef` tags and provides IntelliSense for the defined type.
 
-**Syntax:** `@typedef {type} Name` or `@typedef Name` followed by `@property`
-tags
+**Syntax:** `@typedef {type} Name`, or `@typedef {mapping} Name` followed by
+`@property` tags
 
 ### Simple type alias
 
@@ -308,12 +358,18 @@ tags
 ### Structured shape with properties
 
 Use `@property` tags to define the members of the type. This is the "shape
-definer" — it lets you describe what keys a mapping or data structure is
-expected to have, along with their types.
+definer": it describes which keys a mapping is expected to have, along with
+their types.
+
+Write `{mapping}` as the typedef's type. The result is a named
+[mapping shape](../types/composites/#mapping-shapes). Reading a key gives the
+same type as the inline form `([ "name": string, "level": int, ... ])`: a listed
+key reads as its own type, whether through `m["key"]`, FluffOS's `m.key`, or a
+`foreach`. Keys that aren't listed read as `mixed`.
 
 ```lpc
 /**
- * @typedef PlayerData
+ * @typedef {mapping} PlayerData
  * @property {string} name - The player's display name.
  * @property {int} level - Current experience level.
  * @property {"/std/guild.c"} guild - The player's guild object.
@@ -334,6 +390,9 @@ mapping get_player_data(string player_name) {
 }
 ```
 
+Hovering a variable of this type shows the name `PlayerData`. Hovering the
+typedef itself shows the full shape.
+
 ### Object path resolution
 
 Object paths used within `@typedef` are resolved by the language server,
@@ -341,7 +400,7 @@ giving you full IntelliSense when referencing those types:
 
 ```lpc
 /**
- * @typedef PartyMember
+ * @typedef {mapping} PartyMember
  * @property {"/std/player.c"} player - The player object.
  * @property {string} role - Role in the party (tank, healer, etc.).
  * @property {int} joined - Timestamp when they joined.

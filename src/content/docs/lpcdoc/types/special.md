@@ -61,7 +61,7 @@ void log_message(string message) {
 ## Multiple Return Types
 
 Sometimes functions can return different types depending on their inputs or
-conditions. LPCDoc uses [union types](composites#union-types) to indicate
+conditions. LPCDoc uses [union types](../composites/#union-types) to indicate
 multiple possible return types.
 
 ### Annotation Usage
@@ -112,7 +112,7 @@ int unlock(string which) {
 }
 ```
 
-To document a value that may hold **any** type, use [`mixed`](primitives#mixed).
+To document a value that may hold **any** type, use [`mixed`](../primitives/#mixed-mixed).
 LPCDoc has no separate "any" annotation — a bare `*` is the array suffix, not a
 wildcard — so `mixed` is the way to express it.
 
